@@ -108,6 +108,11 @@ TreeNode.prototype.moveInto = function (target) {
     return
   }
 
+  // cannot move to leaf node
+  if (target.isLeaf) {
+    return
+  }
+
   this.parent._removeChild(this)
   this.parent = target
   this.pid = target.id
@@ -135,21 +140,22 @@ TreeNode.prototype.findChildIndex = function (child) {
 
 TreeNode.prototype._beforeInsert = function (target) {
   if (this.name === 'root' || this === target) {
-    return
+    return false
   }
 
   // cannot move ancestor to child
   if (this.isTargetChild(target)) {
-    return
+    return false
   }
 
   this.parent._removeChild(this)
   this.parent = target.parent
   this.pid = target.parent.id
+  return true
 }
 
 TreeNode.prototype.insertBefore = function (target) {
-  this._beforeInsert(target)
+  if (!this._beforeInsert(target)) return
 
   const pos = target.parent.findChildIndex(target)
   target.parent.children.splice(pos, 0, this)
@@ -161,7 +167,7 @@ TreeNode.prototype.insertBefore = function (target) {
 }
 
 TreeNode.prototype.insertAfter = function (target) {
-  this._beforeInsert(target)
+  if (!this._beforeInsert(target)) return
 
   const pos = target.parent.findChildIndex(target)
   target.parent.children.splice(pos + 1, 0, this)
@@ -182,7 +188,7 @@ Tree.prototype.initNode = function (node, data) {
   for (let i = 0, len = data.length; i < len; i++) {
     var _data = data[i]
 
-    var child = new TreeNode(_data.name, _data.attrs, _data.id)
+    var child = new TreeNode(_data.name, _data.isLeaf, _data.id)
     if (_data.children && _data.children.length > 0) {
       this.initNode(child, _data.children)
     }

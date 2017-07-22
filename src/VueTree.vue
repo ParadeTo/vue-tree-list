@@ -6,6 +6,7 @@
         @dragenter="dragEnterUp"
         @dragover='dragOverUp'
         @dragleave="dragLeaveUp"></div>
+
       <div class='tree-node' :id='model.id' :class="{'active': isDragEnterNode}"
         draggable="true"
         @click=""
@@ -20,10 +21,22 @@
         <span class="caret icon is-small" v-if="model.children && model.children.length > 0">
           <i class="vue-tree-icon" :class="caretClass" @click.prevent.stop="toggle"></i>
         </span>
+
+        <span v-if="model.isLeaf">
+          <slot name="leafNodeIcon">
+            <i class="vue-tree-icon item-icon icon-file"></i>
+          </slot>
+        </span>
+        <span v-else>
+          <slot name="treeNodeIcon">
+            <i class="vue-tree-icon item-icon icon-folder"></i>
+          </slot>
+        </span>
+
         <div class="node-content" v-if="!editable">
           {{model.name}}
         </div>
-        <input v-else class="input" type="text" ref="nodeInput" :value="model.name" @input="updateName" @blur="setUnEditable">
+        <input v-else class="vue-tree-input" type="text" ref="nodeInput" :value="model.name" @input="updateName" @blur="setUnEditable">
         <div class="operation" v-show="isHover">
           <span title="add tree node" @click.stop.prevent="addChild(false)" v-if="!model.isLeaf">
             <slot name="addTreeNode">
@@ -47,6 +60,7 @@
           </span>
         </div>
       </div>
+
       <div v-if="model.children && model.children.length > 0 && expanded"
         class="border bottom"
         :class="{'active': isDragEnterBottom}"
@@ -55,8 +69,13 @@
         @dragover='dragOverBottom'
         @dragleave="dragLeaveBottom"></div>
     </div>
+
     <div :class="{'tree-margin': model.name !== 'root'}" v-show="expanded" v-if="isFolder">
-      <item v-for="model in model.children" :model="model" :key='model.id' :current-highlight='currentHighlight' :default-text='defaultText' 　:hover-color='hoverColor' :highlight-color='highlightColor'>
+      <item v-for="model in model.children"
+        :default-tree-node-name="defaultTreeNodeName"
+        :default-leaf-node-name="defaultLeafNodeName"
+        :model="model"
+        :key='model.id'>
       </item>
     </div>
   </div>
@@ -79,9 +98,23 @@
       }
     },
     props: {
-      model: Object
+      model: {
+        type: Object
+      },
+      defaultLeafNodeName: {
+        type: String,
+        default: 'New leaf node'
+      },
+      defaultTreeNodeName: {
+        type: String,
+        default: 'New tree node'
+      }
     },
     computed: {
+      itemIconClass () {
+        return this.model.isLeaf ? 'icon-file' : 'icon-folder'
+      },
+
       caretClass () {
         return this.expanded ? 'icon-caret-down' : 'icon-caret-right'
       },
@@ -141,6 +174,7 @@
       },
 
       addChild(isLeaf) {
+        const name = isLeaf ? this.defaultLeafNodeName : this.defaultTreeNodeName
         this.expanded = true
         var node = new TreeNode(name, isLeaf)
         this.model.addChildren(node, true)
@@ -160,6 +194,9 @@
         return true
       },
       dragEnter(e) {
+        if (this.model.isLeaf) {
+          return
+        }
         this.isDragEnterNode = true
       },
       dragLeave(e) {
@@ -231,11 +268,23 @@
     /* Better Font Rendering =========== */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    &.item-icon {
+      margin-right: 4px;
+      &:hover {
+        color: inherit;
+      }
+    }
     &:hover {
       color: blue;
     }
   }
 
+  .icon-file:before {
+    content: "\e906";
+  }
+  .icon-folder:before {
+    content: "\e907";
+  }
   .icon-caret-down:before {
     content: "\e900";
   }
@@ -289,15 +338,9 @@
     .caret {
       margin-left: -1rem;
     }
-    /*.fa {*/
-      /*color: #ddd;*/
-      /*&:hover {*/
-        /*color: blue;*/
-      /*}*/
-    /*}*/
     .operation {
       margin-left: 2rem;
-      letter-spacing: 1.2px;
+      letter-spacing: 1px;
     }
   }
 

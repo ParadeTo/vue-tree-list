@@ -27,7 +27,6 @@
   },
   "homepage": "https://github.com/ParadeTo/vue-date-range#readme",
   "dependencies": {
-    "font-awesome": "4.7.0",
     "jquery": "^3.2.1"
   },
   "devDependencies": {
