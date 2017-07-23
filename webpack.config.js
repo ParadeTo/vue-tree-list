@@ -5,8 +5,8 @@ module.exports = {
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'vue-tree.min.js',
-    library: 'vuetree',
+    filename: 'vue-tree-list.min.js',
+    library: 'VueTreeList',
     libraryTarget: 'umd'
   },
   module: {

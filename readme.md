@@ -1,25 +1,25 @@
-# vue-tree
+# vue-tree-list
 A vue component for tree structure. Support adding treenode/leafnode, editing node's name and dragging.
 
-![vue-tree-demo.gif](https://github.com/ParadeTo/vue-tree/tree/master/img/demo.gif)
+![vue-tree-demo.gif](https://github.com/ParadeTo/vue-tree-list/tree/master/img/demo.gif)
 
-[Live Demo](http://paradeto.com/vue-tree/)
+[Live Demo](http://paradeto.com/vue-tree-list/)
 
 # use
 ``npm install vue-tree``
 
 ```javascript
 <button @click="addNode">Add Node</button>
-<vue-tree :model="data" default-tree-node-name="new node" default-leaf-node-name="new leaf"></vue-tree>
+<vue-tree-list :model="data" default-tree-node-name="new node" default-leaf-node-name="new leaf"></vue-tree-list>
 <button @click="getNewTree">Get new tree</button>
 <pre>
   {{newTree}}
 </pre>
 ...
-import { VueTree, Tree, TreeNode } from 'vue-tree'
+import { VueTreeList, Tree, TreeNode } from 'vue-tree'
 export default {
     components: {
-      VueTree
+      VueTreeList
     },
     data () {
       return {

@@ -1,8 +1,8 @@
 {
-  "name": "vue-tree",
+  "name": "vue-tree-list",
   "version": "1.0.0",
   "description": "A vue component for tree structure.",
-  "main": "dist/vue-tree.min.js",
+  "main": "dist/vue-tree-list.min.js",
   "scripts": {
     "test": "karma start --single-run",
     "unit": "karma start --watch",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ParadeTo/vue-tree.git"
+    "url": "git+https://github.com/ParadeTo/vue-tree-list.git"
   },
   "keywords": [
     "vue",
@@ -20,9 +20,9 @@
   "author": "ayou",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ParadeTo/vue-tree/issues"
+    "url": "https://github.com/ParadeTo/vue-tree-list/issues"
   },
-  "homepage": "https://github.com/ParadeTo/vue-tree#readme",
+  "homepage": "https://github.com/ParadeTo/vue-tree-list#readme",
   "dependencies": {
     "jquery": "^3.2.1"
   },

@@ -238,7 +238,7 @@
       }
     },
     beforeCreate () {
-      this.$options.components.item = require('./VueTree.vue')
+      this.$options.components.item = require('./VueTreeList.vue')
     }
   }
 </script>

@@ -78,7 +78,7 @@
             </span>
             New Treenode
         </button>
-        <vue-tree :model="data" default-tree-node-name="new node" default-leaf-node-name="new leaf"></vue-tree>
+        <vue-tree-list :model="data" default-tree-node-name="new node" default-leaf-node-name="new leaf"></vue-tree-list>
     </div>
 
     <div class="container">
@@ -92,7 +92,7 @@
 </div>
 
 <script src="https://unpkg.com/vue/dist/vue.js"></script>
-<script src="../dist/vue-tree.min.js"></script>
+<script src="../dist/vue-tree-list.min.js"></script>
 <script>
   function isMobile() {
     var sUserAgent = navigator.userAgent.toLowerCase();
@@ -115,14 +115,14 @@
   new Vue({
     el: '#app',
     components: {
-      'VueTree': vuetree.VueTree
+      'VueTreeList': VueTreeList.VueTreeList
     },
     data () {
       return {
         isMobile: isMobile(),
         record: null,
         newTree: {},
-        data: new vuetree.Tree([
+        data: new VueTreeList.Tree([
           {
             name: 'Node 1',
             id: 1,
@@ -151,11 +151,11 @@
     },
     methods: {
       getTreeChange: function () {
-        this.record = Object.assign({}, vuetree.Record)
+        this.record = Object.assign({}, VueTreeList.Record)
       },
 
       addNode: function () {
-        var node = new vuetree.TreeNode('new node', false)
+        var node = new VueTreeList.TreeNode('new node', false)
         if (!this.data.children) this.data.children = []
         this.data.addChildren(node)
       },
