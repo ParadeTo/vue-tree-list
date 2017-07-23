@@ -1,0 +1,12 @@
+node_modules
+npm-debug.log
+.idea
+coverage
+examples
+img
+src
+test
+.babelrc
+.travis.yml
+karma.conf.js
+webpack.config.js

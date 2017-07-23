@@ -11,21 +11,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ParadeTo/vue-date-range.git"
+    "url": "git+https://github.com/ParadeTo/vue-tree.git"
   },
   "keywords": [
     "vue",
-    "datepicker",
-    "date",
-    "range",
-    "moment"
+    "tree"
   ],
   "author": "ayou",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ParadeTo/vue-date-range/issues"
+    "url": "https://github.com/ParadeTo/vue-tree/issues"
   },
-  "homepage": "https://github.com/ParadeTo/vue-date-range#readme",
+  "homepage": "https://github.com/ParadeTo/vue-tree#readme",
   "dependencies": {
     "jquery": "^3.2.1"
   },

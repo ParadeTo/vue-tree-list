@@ -5,6 +5,7 @@
     <meta name="viewport" content="with=device-width,initial-scale=1.0,
       maximum-scale=1.0,minimum-scale=1.0,uses-scalable=no">
     <title>vue-tree</title>
+    <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
     <link href="https://cdn.bootcss.com/bulma/0.4.2/css/bulma.min.css" rel="stylesheet">
     <style>
         html {
@@ -71,7 +72,13 @@
         </h1>
     </a>
     <div class="container">
-      <vue-tree :model="data" default-tree-node-name="new node" default-leaf-node-name="new leaf"></vue-tree>
+        <button class="button is-primary is-small" @click="addNode">
+            <span class="icon is-small" style="margin-right: 2px;">
+                <i class="fa fa-plus-circle"></i>
+            </span>
+            New Treenode
+        </button>
+        <vue-tree :model="data" default-tree-node-name="new node" default-leaf-node-name="new leaf"></vue-tree>
     </div>
 
     <div class="container">
@@ -145,6 +152,12 @@
     methods: {
       getTreeChange: function () {
         this.record = Object.assign({}, vuetree.Record)
+      },
+
+      addNode: function () {
+        var node = new vuetree.TreeNode('new node', false)
+        if (!this.data.children) this.data.children = []
+        this.data.addChildren(node)
       },
 
       getNewTree: function () {
