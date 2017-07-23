@@ -16,7 +16,7 @@ A vue component for tree structure. Support adding treenode/leafnode, editing no
   {{newTree}}
 </pre>
 ...
-import { VueTreeList, Tree, TreeNode } from 'vue-tree'
+import { VueTreeList, Tree, TreeNode } from 'vue-tree-list'
 export default {
     components: {
       VueTreeList
