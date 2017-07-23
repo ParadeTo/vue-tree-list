@@ -6,7 +6,7 @@ A vue component for tree structure. Support adding treenode/leafnode, editing no
 [Live Demo](http://paradeto.com/vue-tree-list/)
 
 # use
-``npm install vue-tree``
+``npm install vue-tree-list``
 
 ```javascript
 <button @click="addNode">Add Node</button>
