@@ -182,6 +182,8 @@
 
       dragStart(e) {
         fromComp = this
+        // for firefox
+        e.dataTransfer.setData("data","data");
 
         e.dataTransfer.effectAllowed = 'move'
         return true
