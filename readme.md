@@ -85,4 +85,17 @@ export default {
 
 # props
 default-tree-node-name: Default name for new treenode.
+
 default-leaf-node-name: Default name for new leafnode.
+
+# Forbid dragging
+Use `dragDisabled` to forbid dragging:
+```javascript
+data: new Tree([
+  {
+    name: 'Node 1',
+    id: 1,
+    pid: 0,
+    dragDisabled: true,
+  ...
+```

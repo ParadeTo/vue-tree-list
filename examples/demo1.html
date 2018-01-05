@@ -127,6 +127,7 @@
             name: 'Node 1',
             id: 1,
             pid: 0,
+            dragDisabled: true,
             children: [
               {
                 name: 'Node 1-2',
@@ -139,7 +140,8 @@
           {
             name: 'Node 2',
             id: 3,
-            pid: 0
+            pid: 0,
+            dragDisabled: true
           },
           {
             name: 'Node 3',
@@ -155,7 +157,7 @@
       },
 
       addNode: function () {
-        var node = new VueTreeList.TreeNode('new node', false)
+        var node = new VueTreeList.TreeNode({ name: 'new node', isLeaf: false })
         if (!this.data.children) this.data.children = []
         this.data.addChildren(node)
       },
@@ -165,10 +167,11 @@
         function _dfs (oldNode) {
           let newNode = {}
 
-          newNode.name = oldNode.name
-          newNode.pid = oldNode.pid
-          newNode.isLeaf = oldNode.isLeaf
-          newNode.id = oldNode.id
+          for (var k in oldNode) {
+            if (k !== 'children' && k !== 'parent') {
+              newNode[k] = oldNode[k]
+            }
+          }
 
           if (oldNode.children && oldNode.children.length > 0) {
             newNode.children = []

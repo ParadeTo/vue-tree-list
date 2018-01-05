@@ -6,10 +6,8 @@
         @dragenter="dragEnterUp"
         @dragover='dragOverUp'
         @dragleave="dragLeaveUp"></div>
-
       <div class='tree-node' :id='model.id' :class="{'active': isDragEnterNode}"
-        draggable="true"
-        @click=""
+        :draggable="!model.dragDisabled"
         @dragstart='dragStart'
         @dragover='dragOver'
         @dragenter='dragEnter'
@@ -85,7 +83,7 @@
   import { Tree, TreeNode } from './Tree.js'
   import $ from 'jquery'
 
-  let fromComp = ''
+  let fromComp = null
   export default {
     data: function () {
       return {
@@ -176,17 +174,19 @@
       addChild(isLeaf) {
         const name = isLeaf ? this.defaultLeafNodeName : this.defaultTreeNodeName
         this.expanded = true
-        var node = new TreeNode(name, isLeaf)
+        var node = new TreeNode({ name, isLeaf })
         this.model.addChildren(node, true)
       },
 
       dragStart(e) {
-        fromComp = this
-        // for firefox
-        e.dataTransfer.setData("data","data");
-
-        e.dataTransfer.effectAllowed = 'move'
-        return true
+        if (!this.model.dragDisabled) {
+          fromComp = this
+          // for firefox
+          e.dataTransfer.setData("data","data");
+          e.dataTransfer.effectAllowed = 'move'
+          return true
+        }
+        return false
       },
       dragEnd(e) {
         fromComp = null
@@ -196,20 +196,21 @@
         return true
       },
       dragEnter(e) {
-        if (this.model.isLeaf) {
-          return
-        }
+        if (!fromComp) return
+        if (this.model.isLeaf) return
         this.isDragEnterNode = true
       },
       dragLeave(e) {
         this.isDragEnterNode = false
       },
       drop(e) {
+        if (!fromComp) return
         fromComp.model.moveInto(this.model)
         this.isDragEnterNode = false
       },
 
       dragEnterUp () {
+        if (!fromComp) return
         this.isDragEnterUp = true
       },
       dragOverUp (e) {
@@ -217,14 +218,17 @@
         return true
       },
       dragLeaveUp () {
+        if (!fromComp) return
         this.isDragEnterUp = false
       },
       dropUp () {
+        if (!fromComp) return
         fromComp.model.insertBefore(this.model)
         this.isDragEnterUp = false
       },
 
       dragEnterBottom () {
+        if (!fromComp) return
         this.isDragEnterBottom = true
       },
       dragOverBottom (e) {
@@ -232,9 +236,11 @@
         return true
       },
       dragLeaveBottom () {
+        if (!fromComp) return
         this.isDragEnterBottom = false
       },
       dropBottom () {
+        if (!fromComp) return
         fromComp.model.insertAfter(this.model)
         this.isDragEnterBottom = false
       }
