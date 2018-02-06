@@ -163,9 +163,9 @@
       },
 
       getNewTree: function () {
-        const vm = this
+        var vm = this
         function _dfs (oldNode) {
-          let newNode = {}
+          var newNode = {}
 
           for (var k in oldNode) {
             if (k !== 'children' && k !== 'parent') {
@@ -175,7 +175,7 @@
 
           if (oldNode.children && oldNode.children.length > 0) {
             newNode.children = []
-            for (let i = 0, len = oldNode.children.length; i < len; i++) {
+            for (var i = 0, len = oldNode.children.length; i < len; i++) {
               newNode.children.push(_dfs(oldNode.children[i]))
             }
           }

@@ -23,9 +23,6 @@
     "url": "https://github.com/ParadeTo/vue-tree-list/issues"
   },
   "homepage": "https://github.com/ParadeTo/vue-tree-list#readme",
-  "dependencies": {
-    "jquery": "^3.2.1"
-  },
   "devDependencies": {
     "autoprefixer": "^6.4.0",
     "babel-core": "^6.0.0",

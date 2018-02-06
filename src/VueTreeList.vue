@@ -81,9 +81,10 @@
 
 <script>
   import { Tree, TreeNode } from './Tree.js'
-  import $ from 'jquery'
+  import { addHandler, removeHandler } from './tools.js'
 
   let fromComp = null
+
   export default {
     data: function () {
       return {
@@ -124,7 +125,7 @@
     },
     mounted () {
       const vm = this
-      $(window).on('keyup', function (e) {
+      addHandler(window, 'keyup', function (e) {
         // click enter
         if (e.keyCode === 13 && vm.editable) {
           vm.editable = false
@@ -132,7 +133,7 @@
       })
     },
     beforeDestroy () {
-      $(window).off('keyup')
+      removeHandler(window, 'keyup')
     },
     methods: {
       updateName (e) {
@@ -149,7 +150,8 @@
       setEditable () {
         this.editable = true
         this.$nextTick(() => {
-          $(this.$refs.nodeInput).trigger('focus')
+          this.$refs.nodeInput.focus()
+//          fireFocusEvent(this.$refs.nodeInput)
         })
       },
 
