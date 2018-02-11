@@ -10,7 +10,7 @@ A vue component for tree structure. Support adding treenode/leafnode, editing no
 
 ```javascript
 <button @click="addNode">Add Node</button>
-<vue-tree-list :model="data" default-tree-node-name="new node" default-leaf-node-name="new leaf"></vue-tree-list>
+<vue-tree-list @click="onClick" :model="data" default-tree-node-name="new node" default-leaf-node-name="new leaf"></vue-tree-list>
 <button @click="getNewTree">Get new tree</button>
 <pre>
   {{newTree}}
@@ -23,12 +23,15 @@ export default {
     },
     data () {
       return {
+        isMobile: isMobile(),
+        record: null,
         newTree: {},
-        data: new Tree([
+        data: new VueTreeList.Tree([
           {
             name: 'Node 1',
             id: 1,
             pid: 0,
+            dragDisabled: true,
             children: [
               {
                 name: 'Node 1-2',
@@ -41,7 +44,8 @@ export default {
           {
             name: 'Node 2',
             id: 3,
-            pid: 0
+            pid: 0,
+            dragDisabled: true
           },
           {
             name: 'Node 3',
@@ -52,25 +56,30 @@ export default {
       }
     },
     methods: {
+      getTreeChange: function () {
+        this.record = Object.assign({}, VueTreeList.Record)
+      },
+
       addNode: function () {
-        var node = new TreeNode('new node', false)
+        var node = new VueTreeList.TreeNode({ name: 'new node', isLeaf: false })
         if (!this.data.children) this.data.children = []
         this.data.addChildren(node)
       },
 
       getNewTree: function () {
-        const vm = this
+        var vm = this
         function _dfs (oldNode) {
-          let newNode = {}
+          var newNode = {}
 
-          newNode.name = oldNode.name
-          newNode.pid = oldNode.pid
-          newNode.isLeaf = oldNode.isLeaf
-          newNode.id = oldNode.id
+          for (var k in oldNode) {
+            if (k !== 'children' && k !== 'parent') {
+              newNode[k] = oldNode[k]
+            }
+          }
 
           if (oldNode.children && oldNode.children.length > 0) {
             newNode.children = []
-            for (let i = 0, len = oldNode.children.length; i < len; i++) {
+            for (var i = 0, len = oldNode.children.length; i < len; i++) {
               newNode.children.push(_dfs(oldNode.children[i]))
             }
           }
@@ -78,15 +87,35 @@ export default {
         }
 
         vm.newTree = _dfs(vm.data)
+      },
+
+      onClick(model) {
+        console.log(model)
       }
     }
 }
 ```
 
 # props
-default-tree-node-name: Default name for new treenode.
+**default-tree-node-name**
+ 
+ Default name for new treenode.
 
-default-leaf-node-name: Default name for new leafnode.
+**default-leaf-node-name**
+
+Default name for new leafnode.
+
+# events
+**click**
+
+```javascript
+<vue-tree-list @click="onClick" ...
+...
+onClick(model) {
+  console.log(model)
+}
+...
+```
 
 # Forbid dragging
 Use `dragDisabled` to forbid dragging:
@@ -99,3 +128,4 @@ data: new Tree([
     dragDisabled: true,
   ...
 ```
+

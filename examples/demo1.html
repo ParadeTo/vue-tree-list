@@ -78,7 +78,7 @@
             </span>
             New Treenode
         </button>
-        <vue-tree-list :model="data" default-tree-node-name="new node" default-leaf-node-name="new leaf"></vue-tree-list>
+        <vue-tree-list @click="onClick" :model="data" default-tree-node-name="new node" default-leaf-node-name="new leaf"></vue-tree-list>
     </div>
 
     <div class="container">
@@ -183,6 +183,10 @@
         }
 
         vm.newTree = _dfs(vm.data)
+      },
+
+      onClick(model) {
+        console.log(model)
       }
     }
   })

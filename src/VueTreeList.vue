@@ -15,7 +15,8 @@
         @drop='drop'
         @dragend='dragEnd'
         @mouseover='mouseOver'
-        @mouseout='mouseOut'>
+        @mouseout='mouseOut'
+        @click.stop='click'>
         <span class="caret icon is-small" v-if="model.children && model.children.length > 0">
           <i class="vue-tree-icon" :class="caretClass" @click.prevent.stop="toggle"></i>
         </span>
@@ -171,6 +172,15 @@
 
       mouseOut(e) {
         this.isHover = false
+      },
+
+      click() {
+        var node = this.$parent
+        var clickModel = this.model
+        while (node._props.model.name !== 'root') {
+          node = node.$parent
+        }
+        node.$emit('click', clickModel)
       },
 
       addChild(isLeaf) {
