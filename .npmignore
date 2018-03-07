@@ -9,4 +9,4 @@ test
 .babelrc
 .travis.yml
 karma.conf.js
-webpack.config.js
+build

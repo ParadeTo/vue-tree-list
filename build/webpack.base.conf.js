@@ -1,14 +1,9 @@
 var webpack = require('webpack');
 var path = require('path');
 
+var projectRoot = path.resolve(__dirname, '../')
+
 module.exports = {
-  entry: './src/index.js',
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'vue-tree-list.min.js',
-    library: 'VueTreeList',
-    libraryTarget: 'umd'
-  },
   module: {
     loaders: [
       {
@@ -18,7 +13,7 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel',
-        include: [path.join(__dirname, 'src')],
+        include: [path.join(projectRoot, 'src'), path.join(projectRoot, 'dev')],
         exclude: /node_modules/
       },
       {
@@ -40,12 +35,5 @@ module.exports = {
         browsers: ['iOS >= 7', 'Android >= 4.1']
       })
     ]
-  },
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      }
-    })
-  ]
+  }
 }
