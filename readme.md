@@ -26,7 +26,7 @@ export default {
         isMobile: isMobile(),
         record: null,
         newTree: {},
-        data: new VueTreeList.Tree([
+        data: new Tree([
           {
             name: 'Node 1',
             id: 1,
@@ -56,12 +56,8 @@ export default {
       }
     },
     methods: {
-      getTreeChange: function () {
-        this.record = Object.assign({}, VueTreeList.Record)
-      },
-
       addNode: function () {
-        var node = new VueTreeList.TreeNode({ name: 'new node', isLeaf: false })
+        var node = new TreeNode({ name: 'new node', isLeaf: false })
         if (!this.data.children) this.data.children = []
         this.data.addChildren(node)
       },
