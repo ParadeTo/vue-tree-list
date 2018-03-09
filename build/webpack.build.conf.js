@@ -12,5 +12,12 @@ module.exports = merge(baseConfig, {
     filename: 'vue-tree-list.min.js',
     library: 'VueTreeList',
     libraryTarget: 'umd'
-  }
+  },
+  plugins: [
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
+    })
+  ]
 })
