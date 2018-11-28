@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div class='vtl'>
     <div v-if="model.name !== 'root'">
-      <div class="border up" :class="{'active': isDragEnterUp}"
+      <div class="vtl-border vtl-up" :class="{'vtl-active': isDragEnterUp}"
         @drop="dropUp"
         @dragenter="dragEnterUp"
         @dragover='dragOverUp'
         @dragleave="dragLeaveUp"></div>
-      <div class='tree-node' :id='model.id' :class="{'active': isDragEnterNode}"
+      <div :id='model.id' :class="treeNodeClass"
         :draggable="!model.dragDisabled"
         @dragstart='dragStart'
         @dragover='dragOver'
@@ -17,59 +17,59 @@
         @mouseover='mouseOver'
         @mouseout='mouseOut'
         @click.stop='click'>
-        <span class="caret icon is-small" v-if="model.children && model.children.length > 0">
-          <i class="vue-tree-icon" :class="caretClass" @click.prevent.stop="toggle"></i>
+        <span class="vtl-caret vtl-is-small" v-if="model.children && model.children.length > 0">
+          <i class="vtl-icon" :class="caretClass" @click.prevent.stop="toggle"></i>
         </span>
 
         <span v-if="model.isLeaf">
           <slot name="leafNodeIcon">
-            <i class="vue-tree-icon item-icon icon-file"></i>
+            <i class="vtl-icon vtl-menu-icon vtl-icon-file"></i>
           </slot>
         </span>
         <span v-else>
           <slot name="treeNodeIcon">
-            <i class="vue-tree-icon item-icon icon-folder"></i>
+            <i class="vtl-icon vtl-menu-icon vtl-icon-folder"></i>
           </slot>
         </span>
 
-        <div class="node-content" v-if="!editable">
+        <div class="vtl-node-content" v-if="!editable">
           {{model.name}}
         </div>
-        <input v-else class="vue-tree-input" type="text" ref="nodeInput" :value="model.name" @input="updateName" @blur="setUnEditable">
-        <div class="operation" v-show="isHover">
+        <input v-else class="vtl-input" type="text" ref="nodeInput" :value="model.name" @input="updateName" @blur="setUnEditable">
+        <div class="vtl-operation" v-show="isHover">
           <span title="add tree node" @click.stop.prevent="addChild(false)" v-if="!model.isLeaf">
             <slot name="addTreeNode">
-              <i class="vue-tree-icon icon-folder-plus-e"></i>
+              <i class="vtl-icon vtl-icon-folder-plus-e"></i>
             </slot>
           </span>
           <span title="add tree node" @click.stop.prevent="addChild(true)" v-if="!model.isLeaf">
             <slot name="addLeafNode">
-              <i class="vue-tree-icon icon-plus"></i>
+              <i class="vtl-icon vtl-icon-plus"></i>
             </slot>
           </span>
           <span title="edit" @click.stop.prevent="setEditable">
             <slot name="edit">
-              <i class="vue-tree-icon icon-edit"></i>
+              <i class="vtl-icon vtl-icon-edit"></i>
             </slot>
           </span>
           <span title="delete" @click.stop.prevent="delNode">
             <slot name="edit">
-              <i class="vue-tree-icon icon-trash"></i>
+              <i class="vtl-icon vtl-icon-trash"></i>
             </slot>
           </span>
         </div>
       </div>
 
       <div v-if="model.children && model.children.length > 0 && expanded"
-        class="border bottom"
-        :class="{'active': isDragEnterBottom}"
+        class="vtl-border vtl-bottom"
+        :class="{'vtl-active': isDragEnterBottom}"
         @drop="dropBottom"
         @dragenter="dragEnterBottom"
         @dragover='dragOverBottom'
         @dragleave="dragLeaveBottom"></div>
     </div>
 
-    <div :class="{'tree-margin': model.name !== 'root'}" v-show="expanded" v-if="isFolder">
+    <div :class="{'vtl-tree-margin': model.name !== 'root'}" v-show="expanded" v-if="isFolder">
       <item v-for="model in model.children"
         :default-tree-node-name="defaultTreeNodeName"
         :default-leaf-node-name="defaultLeafNodeName"
@@ -112,16 +112,33 @@
     },
     computed: {
       itemIconClass () {
-        return this.model.isLeaf ? 'icon-file' : 'icon-folder'
+        return this.model.isLeaf ? 'vtl-icon-file' : 'vtl-icon-folder'
       },
 
       caretClass () {
-        return this.expanded ? 'icon-caret-down' : 'icon-caret-right'
+        return this.expanded ? 'vtl-icon-caret-down' : 'vtl-icon-caret-right'
       },
 
-      isFolder() {
+      isFolder () {
         return this.model.children &&
           this.model.children.length
+      },
+
+      treeNodeClass () {
+        const {
+          model: {
+            dragDisabled,
+            disabled
+          },
+          isDragEnterNode
+        } = this
+
+        return {
+          'vtl-tree-node': true,
+          'vtl-active': isDragEnterNode,
+          'vtl-drag-disabled': dragDisabled,
+          'vtl-disabled': disabled
+        }
       }
     },
     mounted () {
@@ -167,6 +184,7 @@
       },
 
       mouseOver(e) {
+        if (this.model.disabled) return
         this.isHover = true
       },
 
@@ -191,7 +209,7 @@
       },
 
       dragStart(e) {
-        if (!this.model.dragDisabled) {
+        if (!(this.model.dragDisabled || this.model.disabled)) {
           fromComp = this
           // for firefox
           e.dataTransfer.setData("data","data");
@@ -263,7 +281,7 @@
   }
 </script>
 
-<style lang="less" rel="stylesheet/less" scoped>
+<style lang="less" rel="stylesheet/less">
   @font-face {
     font-family: 'icomoon';
     src:  url('fonts/icomoon.eot?ui1hbx');
@@ -275,7 +293,7 @@
     font-style: normal;
   }
 
-  .vue-tree-icon {
+  .vtl-icon {
     /* use !important to prevent issues with browser extensions that change fonts */
     font-family: 'icomoon' !important;
     speak: none;
@@ -288,7 +306,7 @@
     /* Better Font Rendering =========== */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    &.item-icon {
+    &.vtl-menu-icon {
       margin-right: 4px;
       &:hover {
         color: inherit;
@@ -299,52 +317,52 @@
     }
   }
 
-  .icon-file:before {
+  .vtl-icon-file:before {
     content: "\e906";
   }
-  .icon-folder:before {
+  .vtl-icon-folder:before {
     content: "\e907";
   }
-  .icon-caret-down:before {
+  .vtl-icon-caret-down:before {
     content: "\e901";
   }
-  .icon-caret-right:before {
+  .vtl-icon-caret-right:before {
     content: "\e900";
   }
-  .icon-edit:before {
+  .vtl-icon-edit:before {
     content: "\e902";
   }
-  .icon-folder-plus-e:before {
+  .vtl-icon-folder-plus-e:before {
     content: "\e903";
   }
-  .icon-plus:before {
+  .vtl-icon-plus:before {
     content: "\e904";
   }
-  .icon-trash:before {
+  .vtl-icon-trash:before {
     content: "\e905";
   }
 
 
-  .border {
+  .vtl-border {
     height: 5px;
-    &.up {
+    &.vtl-up {
       margin-top: -5px;
       background-color: transparent;
     }
-    &.bottom {
+    &.vtl-bottom {
       background-color: transparent;
     }
-    &.active {
+    &.vtl-active {
       border-bottom: 3px dashed blue;
       /*background-color: blue;*/
     }
   }
 
-  .tree-node {
+  .vtl-tree-node {
     display: flex;
     align-items: center;
     padding: 5px 0 5px 1rem;
-    .input {
+    .vtl-input {
       border: none;
       max-width: 150px;
       border-bottom: 1px solid blue;
@@ -352,23 +370,23 @@
     &:hover {
       background-color: #f0f0f0;
     }
-    &.active {
+    &.vtl-active {
       outline: 2px dashed pink;
     }
-    .caret {
+    .vtl-caret {
       margin-left: -1rem;
     }
-    .operation {
+    .vtl-operation {
       margin-left: 2rem;
       letter-spacing: 1px;
     }
   }
 
 
-  .item {
+  .vtl-item {
     cursor: pointer;
   }
-  .tree-margin {
+  .vtl-tree-margin {
     margin-left: 2em;
   }
 </style>

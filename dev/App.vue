@@ -36,7 +36,7 @@
             name: 'Node 2',
             id: 3,
             pid: 0,
-            dragDisabled: true
+            disabled: true
           },
           {
             name: 'Node 3',
@@ -82,3 +82,16 @@
     }
   }
 </script>
+<style lang="less" rel="stylesheet/less">
+  .vtl {
+    .vtl-drag-disabled {
+      background-color: #d0cfcf;
+      &:hover {
+        background-color: #d0cfcf;
+      }
+    }
+    .vtl-disabled {
+      background-color: #d0cfcf;
+    }
+  }
+</style>

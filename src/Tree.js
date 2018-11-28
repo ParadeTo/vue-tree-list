@@ -1,6 +1,3 @@
-// used to record treenode's change
-// let Record = {}
-// treenode's id
 let nodeId = 1
 
 /**
@@ -11,6 +8,7 @@ let nodeId = 1
  *   isLeaf: treenode is leaf node or not
  *   id: id
  *   dragDisabled: decide if it can be dragged
+ *   disabled: desabled all operation
  */
 const TreeNode = function (data) {
   const { id, isLeaf } = data
@@ -29,22 +27,8 @@ const TreeNode = function (data) {
   }
 }
 
-// TreeNode.prototype.updateRecordProperty = function () {
-//   if (!Record[this.id]) {
-//     Record[this.id] = {}
-//   }
-//
-//   Record[this.id].name = this.name
-//   Record[this.id].id = this.id
-//   Record[this.id].pid = this.pid
-//   Record[this.id].isLeaf = this.isLeaf
-// }
-
 TreeNode.prototype.changeName = function (name) {
   this.name = name
-
-  // this.updateRecordProperty()
-  // Record[this.id].modify = true
 }
 
 TreeNode.prototype.addChildren = function (children, isNew) {
@@ -57,11 +41,6 @@ TreeNode.prototype.addChildren = function (children, isNew) {
       const child = children[i]
       child.parent = this
       child.pid = this.id
-
-      // if (isNew) {
-        // child.updateRecordProperty()
-        // Record[child.id].add = true
-      // }
     }
     this.children.concat(children)
   } else {
@@ -69,11 +48,6 @@ TreeNode.prototype.addChildren = function (children, isNew) {
     child.parent = this
     child.pid = this.id
     this.children.push(child)
-
-    // if (isNew) {
-      // child.updateRecordProperty()
-      // Record[child.id].add = true
-    // }
   }
 }
 
@@ -82,9 +56,6 @@ TreeNode.prototype.remove = function () {
   const parent = this.parent
   const index = parent.findChildIndex(this)
   parent.children.splice(index, 1)
-
-  // this.updateRecordProperty()
-  // Record[this.id].remove = true
 }
 
 // remove child
@@ -130,11 +101,6 @@ TreeNode.prototype.moveInto = function (target) {
     target.children = []
   }
   target.children.unshift(this)
-
-  // this.updateRecordProperty()
-  // Record[this.id].targetId = target.id
-  // Record[this.id].move = true
-  // Record[this.id].moveType = 'inside'
 }
 
 TreeNode.prototype.findChildIndex = function (child) {
@@ -169,11 +135,6 @@ TreeNode.prototype.insertBefore = function (target) {
 
   const pos = target.parent.findChildIndex(target)
   target.parent.children.splice(pos, 0, this)
-
-  // this.updateRecordProperty()
-  // Record[this.id].targetId = target.id
-  // Record[this.id].move = true
-  // Record[this.id].moveType = 'before'
 }
 
 TreeNode.prototype.insertAfter = function (target) {
@@ -181,14 +142,9 @@ TreeNode.prototype.insertAfter = function (target) {
 
   const pos = target.parent.findChildIndex(target)
   target.parent.children.splice(pos + 1, 0, this)
-
-  // this.updateRecordProperty()
-  // Record[this.id].targetId = target.id
-  // Record[this.id].move = true
-  // Record[this.id].moveType = 'after'
 }
 
-function Tree(data) {
+function Tree (data) {
   this.root = new TreeNode({ name: 'root', isLeaf: false, id: 0 })
   this.initNode(this.root, data)
   return this.root
@@ -208,4 +164,3 @@ Tree.prototype.initNode = function (node, data) {
 
 exports.Tree = Tree
 exports.TreeNode = TreeNode
-// exports.Record = Record
