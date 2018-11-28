@@ -9,7 +9,7 @@
     </div>
 </template>
 <script>
-  import { VueTreeList, Tree, TreeNode } from '../dist/vue-tree-list.min'
+  import { VueTreeList, Tree, TreeNode } from '../src'
   export default {
     components: {
       VueTreeList

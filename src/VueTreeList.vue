@@ -306,10 +306,10 @@
     content: "\e907";
   }
   .icon-caret-down:before {
-    content: "\e900";
+    content: "\e901";
   }
   .icon-caret-right:before {
-    content: "\e901";
+    content: "\e900";
   }
   .icon-edit:before {
     content: "\e902";
