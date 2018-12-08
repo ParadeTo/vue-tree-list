@@ -89,7 +89,6 @@
 
   export default {
     data: function () {
-      console.log(11111, this.defaultExpanded)
       return {
         isHover: false,
         editable: false,
@@ -122,7 +121,6 @@
       },
 
       caretClass () {
-        console.log(this.expanded)
         return this.expanded ? 'vtl-icon-caret-down' : 'vtl-icon-caret-right'
       },
 
