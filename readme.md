@@ -99,6 +99,10 @@ export default {
 
 Default name for new leafnode.
 
+**default-expanded**
+
+Default node is expanded or not.
+
 # events
 **click**
 
