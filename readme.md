@@ -99,6 +99,16 @@ export default {
 
 Default name for new leafnode.
 
+**onDeleteNode**
+
+```javascript
+onDeleteNode(confirm) {
+  if (something) {
+    confirm()
+  }
+}
+```
+
 # events
 **click**
 
