@@ -1,5 +1,3 @@
-let nodeId = 1
-
 /**
  * Tree data struct
  * Created by ayou on 2017/7/20.
@@ -13,7 +11,7 @@ let nodeId = 1
 const TreeNode = function (data) {
   const { id, isLeaf } = data
   // this.name = name
-  this.id = (typeof id === 'undefined') ? ('new' + nodeId++) : id
+  this.id = (typeof id === 'undefined') ? new Date().valueOf() : id
   this.parent = null
   // this.pid = null
   this.children = null
