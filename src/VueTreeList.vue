@@ -69,10 +69,11 @@
         @dragleave="dragLeaveBottom"></div>
     </div>
 
-    <div :class="{'vtl-tree-margin': model.name !== 'root'}" v-show="expanded" v-if="isFolder">
+    <div :class="{'vtl-tree-margin': model.name !== 'root'}" v-show="model.name === 'root' || expanded" v-if="isFolder">
       <item v-for="model in model.children"
         :default-tree-node-name="defaultTreeNodeName"
         :default-leaf-node-name="defaultLeafNodeName"
+        v-bind:default-expanded="defaultExpanded"
         :model="model"
         :key='model.id'>
       </item>
@@ -88,13 +89,14 @@
 
   export default {
     data: function () {
+      console.log(11111, this.defaultExpanded)
       return {
         isHover: false,
         editable: false,
         isDragEnterUp: false,
         isDragEnterBottom: false,
         isDragEnterNode: false,
-        expanded: true
+        expanded: this.defaultExpanded
       }
     },
     props: {
@@ -108,6 +110,10 @@
       defaultTreeNodeName: {
         type: String,
         default: 'New tree node'
+      },
+      defaultExpanded: {
+        type: Boolean,
+        default: true
       }
     },
     computed: {
@@ -116,6 +122,7 @@
       },
 
       caretClass () {
+        console.log(this.expanded)
         return this.expanded ? 'vtl-icon-caret-down' : 'vtl-icon-caret-right'
       },
 

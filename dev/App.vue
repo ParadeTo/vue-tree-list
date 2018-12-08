@@ -1,7 +1,13 @@
 <template>
     <div>
         <button @click="addNode">Add Node</button>
-        <vue-tree-list @click="onClick" :model="data" default-tree-node-name="new node" default-leaf-node-name="new leaf"></vue-tree-list>
+        <vue-tree-list
+          @click="onClick"
+          :model="data"
+          default-tree-node-name="new node"
+          default-leaf-node-name="new leaf"
+          v-bind:default-expanded="false">
+        </vue-tree-list>
         <button @click="getNewTree">Get new tree</button>
         <pre>
           {{newTree}}
