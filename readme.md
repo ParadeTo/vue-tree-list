@@ -99,9 +99,21 @@ export default {
 
 Default name for new leafnode.
 
+
+**onDeleteNode**
+
+```javascript
+onDeleteNode(confirm) {
+  if (something) {
+    confirm()
+  }
+}
+```
+
 **default-expanded**
 
 Default node is expanded or not.
+
 
 # events
 **click**

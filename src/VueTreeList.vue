@@ -110,6 +110,10 @@
         type: String,
         default: 'New tree node'
       },
+      onDeleteNode: {
+        type: Function,
+        default: (confirm) => {confirm()
+      },
       defaultExpanded: {
         type: Boolean,
         default: true
@@ -165,9 +169,8 @@
 
       delNode () {
         const vm = this
-        if (window.confirm('Are you sure?')) {
-          vm.model.remove()
-        }
+        const confirm = () => vm.model.remove()
+        this.onDeleteNode(confirm)
       },
 
       setEditable () {
