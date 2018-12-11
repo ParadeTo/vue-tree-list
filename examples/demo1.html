@@ -59,6 +59,27 @@
             }
         }
 
+        .vtl .vtl-drag-disabled, .vtl .vtl-drag-disabled:hover {
+          background-color: #dbd7d7;
+          position: relative;
+        }
+
+        .vtl .vtl-drag-disabled::after, .vtl .vtl-disabled::after {
+          content: 'drag disabled';
+          position: absolute;
+          right: 10px;
+          font-size: 12px;
+          font-style: italic;
+        }
+
+        .vtl .vtl-disabled, .vtl .vtl-disabled:hover {
+          background-color: red;
+          position: relative;
+        }
+
+        .vtl .vtl-disabled::after {
+          content: 'disabled';
+        }
     </style>
 </head>
 <body>
@@ -141,7 +162,7 @@
             name: 'Node 2',
             id: 3,
             pid: 0,
-            dragDisabled: true
+            disabled: true
           },
           {
             name: 'Node 3',
