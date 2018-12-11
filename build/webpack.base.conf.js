@@ -1,5 +1,4 @@
-var webpack = require('webpack');
-var path = require('path');
+var path = require('path')
 
 var projectRoot = path.resolve(__dirname, '../')
 

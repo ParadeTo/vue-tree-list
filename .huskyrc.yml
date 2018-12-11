@@ -1,0 +1,4 @@
+hooks:
+  pre-commit:
+    - npm run standard
+  commit-msg: commitlint -E HUSKY_GIT_PARAMS
