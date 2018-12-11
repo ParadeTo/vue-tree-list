@@ -69,10 +69,11 @@
         @dragleave="dragLeaveBottom"></div>
     </div>
 
-    <div :class="{'vtl-tree-margin': model.name !== 'root'}" v-show="expanded" v-if="isFolder">
+    <div :class="{'vtl-tree-margin': model.name !== 'root'}" v-show="model.name === 'root' || expanded" v-if="isFolder">
       <item v-for="model in model.children"
         :default-tree-node-name="defaultTreeNodeName"
         :default-leaf-node-name="defaultLeafNodeName"
+        v-bind:default-expanded="defaultExpanded"
         :model="model"
         :key='model.id'>
       </item>
@@ -94,7 +95,7 @@
         isDragEnterUp: false,
         isDragEnterBottom: false,
         isDragEnterNode: false,
-        expanded: true
+        expanded: this.defaultExpanded
       }
     },
     props: {
@@ -111,7 +112,11 @@
       },
       onDeleteNode: {
         type: Function,
-        default: (confirm) => {confirm()}
+        default: (confirm) => {confirm()
+      },
+      defaultExpanded: {
+        type: Boolean,
+        default: true
       }
     },
     computed: {
