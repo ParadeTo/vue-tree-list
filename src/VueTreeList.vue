@@ -112,7 +112,7 @@
       },
       onDeleteNode: {
         type: Function,
-        default: (confirm) => {confirm()
+        default: confirm => { confirm() }
       },
       defaultExpanded: {
         type: Boolean,
