@@ -164,13 +164,18 @@
     },
     methods: {
       updateName (e) {
+        var oldName = this.model.name;
         this.model.changeName(e.target.value)
+        var node = this.getRootNode();
+        node.$emit('change-name', {'id': this.model.id, 'oldName': oldName, 'newName': e.target.value})
       },
 
       delNode () {
         const vm = this
         const confirm = () => vm.model.remove()
         this.onDeleteNode(confirm)
+        var node = this.getRootNode()
+        node.$emit('delete-node', this.model)
       },
 
       setEditable () {
@@ -201,12 +206,8 @@
       },
 
       click() {
-        var node = this.$parent
-        var clickModel = this.model
-        while (node._props.model.name !== 'root') {
-          node = node.$parent
-        }
-        node.$emit('click', clickModel)
+        var node = this.getRootNode()
+        node.$emit('click', this.model);
       },
 
       addChild(isLeaf) {
@@ -214,6 +215,8 @@
         this.expanded = true
         var node = new TreeNode({ name, isLeaf })
         this.model.addChildren(node, true)
+        var root = this.getRootNode();
+        root.$emit('new-node', node)
       },
 
       dragStart(e) {
@@ -281,6 +284,13 @@
         if (!fromComp) return
         fromComp.model.insertAfter(this.model)
         this.isDragEnterBottom = false
+      },
+      getRootNode() {
+        var node = this.$parent
+        while (node._props.model.name !== 'root') {
+          node = node.$parent
+        }
+        return node;
       }
     },
     beforeCreate () {
