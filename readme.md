@@ -9,14 +9,25 @@ A vue component for tree structure. Support adding treenode/leafnode, editing no
 ``npm install vue-tree-list``
 
 ```javascript
-<button @click="addNode">Add Node</button>
-<vue-tree-list @click="onClick" :model="data" default-tree-node-name="new node" default-leaf-node-name="new leaf"></vue-tree-list>
-<button @click="getNewTree">Get new tree</button>
-<pre>
-  {{newTree}}
-</pre>
+<div>
+    <button @click="addNode">Add Node</button>
+    <vue-tree-list
+      @click="onClick"
+      @change-name="onChange"
+      @delete-node="onChange"
+      @add-node="onChange"
+      :model="data"
+      default-tree-node-name="new node"
+      default-leaf-node-name="new leaf"
+      v-bind:default-expanded="false">
+    </vue-tree-list>
+    <button @click="getNewTree">Get new tree</button>
+    <pre>
+      {{newTree}}
+    </pre>
+</div>
 ...
-import { VueTreeList, Tree, TreeNode } from '../src'
+import { VueTreeList, Tree, TreeNode } from 'vue-tree-list'
 export default {
   components: {
     VueTreeList
@@ -43,7 +54,7 @@ export default {
           name: 'Node 2',
           id: 3,
           pid: 0,
-          dragDisabled: true
+          disabled: true
         },
         {
           name: 'Node 3',
@@ -54,13 +65,17 @@ export default {
     }
   },
   methods: {
-    addNode: function () {
+    onChange (data) {
+      console.log(data)
+    },
+
+    addNode () {
       var node = new TreeNode({ name: 'new node', isLeaf: false })
       if (!this.data.children) this.data.children = []
       this.data.addChildren(node)
     },
 
-    getNewTree: function () {
+    getNewTree () {
       var vm = this
       function _dfs (oldNode) {
         var newNode = {}
@@ -92,8 +107,8 @@ export default {
 
 # props
 **default-tree-node-name**
- 
- Default name for new treenode.
+
+Default name for new treenode.
 
 **default-leaf-node-name**
 
@@ -118,14 +133,11 @@ Default node is expanded or not.
 # events
 **click**
 
-```javascript
-<vue-tree-list @click="onClick" ...
-...
-onClick(model) {
-  console.log(model)
-}
-...
-```
+**change-name**
+
+**delete-node**
+
+**add-node**
 
 # Forbid dragging
 Use `dragDisabled` to forbid dragging:

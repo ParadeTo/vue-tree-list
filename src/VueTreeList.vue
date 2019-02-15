@@ -216,7 +216,7 @@
         var node = new TreeNode({ name, isLeaf })
         this.model.addChildren(node, true)
         var root = this.getRootNode();
-        root.$emit('new-node', node)
+        root.$emit('add-node', node)
       },
 
       dragStart(e) {

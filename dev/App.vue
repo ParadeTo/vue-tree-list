@@ -3,6 +3,9 @@
         <button @click="addNode">Add Node</button>
         <vue-tree-list
           @click="onClick"
+          @change-name="onChange"
+          @delete-node="onChange"
+          @add-node="onChange"
           :model="data"
           default-tree-node-name="new node"
           default-leaf-node-name="new leaf"
@@ -53,13 +56,17 @@
       }
     },
     methods: {
-      addNode: function () {
+      onChange (data) {
+        console.log(data)
+      },
+
+      addNode () {
         var node = new TreeNode({ name: 'new node', isLeaf: false })
         if (!this.data.children) this.data.children = []
         this.data.addChildren(node)
       },
 
-      getNewTree: function () {
+      getNewTree () {
         var vm = this
         function _dfs (oldNode) {
           var newNode = {}
