@@ -4,12 +4,16 @@
         <vue-tree-list
           @click="onClick"
           @change-name="onChange"
-          @delete-node="onChange"
+          @delete-node="onDel"
           @add-node="onChange"
           :model="data"
           default-tree-node-name="new node"
           default-leaf-node-name="new leaf"
           v-bind:default-expanded="false">
+          <span class="icon" slot="addTreeNode">addTreeNode</span>
+          <span class="icon" slot="addLeafNode">addLeafNode</span>
+          <span class="icon" slot="editNode">editNode</span>
+          <span class="icon" slot="delNode">delNode</span>
         </vue-tree-list>
         <button @click="getNewTree">Get new tree</button>
         <pre>
@@ -56,6 +60,10 @@
       }
     },
     methods: {
+      onDel (node) {
+        node.remove()
+      },
+
       onChange (data) {
         console.log(data)
       },
@@ -105,6 +113,14 @@
     }
     .vtl-disabled {
       background-color: #d0cfcf;
+    }
+  }
+</style>
+
+<style lang="less" rel="stylesheet/less" scoped>
+  .icon {
+    &:hover {
+      cursor: pointer;
     }
   }
 </style>

@@ -42,18 +42,18 @@
               <i class="vtl-icon vtl-icon-folder-plus-e"></i>
             </slot>
           </span>
-          <span title="add tree node" @click.stop.prevent="addChild(true)" v-if="!model.isLeaf">
+          <span title="add leaf node" @click.stop.prevent="addChild(true)" v-if="!model.isLeaf">
             <slot name="addLeafNode">
               <i class="vtl-icon vtl-icon-plus"></i>
             </slot>
           </span>
           <span title="edit" @click.stop.prevent="setEditable">
-            <slot name="edit">
+            <slot name="editNode">
               <i class="vtl-icon vtl-icon-edit"></i>
             </slot>
           </span>
           <span title="delete" @click.stop.prevent="delNode">
-            <slot name="edit">
+            <slot name="delNode">
               <i class="vtl-icon vtl-icon-trash"></i>
             </slot>
           </span>
@@ -76,6 +76,10 @@
         v-bind:default-expanded="defaultExpanded"
         :model="model"
         :key='model.id'>
+          <slot name="addTreeNode" slot="addTreeNode" />
+          <slot name="addLeafNode" slot="addLeafNode" />
+          <slot name="editNode" slot="editNode" />
+          <slot name="delNode" slot="delNode" />
       </item>
     </div>
   </div>
@@ -109,10 +113,6 @@
       defaultTreeNodeName: {
         type: String,
         default: 'New tree node'
-      },
-      onDeleteNode: {
-        type: Function,
-        default: confirm => { confirm() }
       },
       defaultExpanded: {
         type: Boolean,
@@ -171,9 +171,6 @@
       },
 
       delNode () {
-        const vm = this
-        const confirm = () => vm.model.remove()
-        this.onDeleteNode(confirm)
         var node = this.getRootNode()
         node.$emit('delete-node', this.model)
       },

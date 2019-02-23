@@ -114,17 +114,6 @@ Default name for new treenode.
 
 Default name for new leafnode.
 
-
-**onDeleteNode**
-
-```javascript
-onDeleteNode(confirm) {
-  if (something) {
-    confirm()
-  }
-}
-```
-
 **default-expanded**
 
 Default node is expanded or not.
@@ -136,6 +125,14 @@ Default node is expanded or not.
 **change-name**
 
 **delete-node**
+
+```javascript
+@delete-node="onDel"
+...
+onDel (node) {
+  node.remove()
+},
+```
 
 **add-node**
 

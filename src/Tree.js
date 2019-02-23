@@ -10,10 +10,8 @@
  */
 const TreeNode = function (data) {
   const { id, isLeaf } = data
-  // this.name = name
   this.id = (typeof id === 'undefined') ? new Date().valueOf() : id
   this.parent = null
-  // this.pid = null
   this.children = null
   this.isLeaf = !!isLeaf
 
@@ -29,7 +27,7 @@ TreeNode.prototype.changeName = function (name) {
   this.name = name
 }
 
-TreeNode.prototype.addChildren = function (children, isNew) {
+TreeNode.prototype.addChildren = function (children) {
   if (!this.children) {
     this.children = []
   }
