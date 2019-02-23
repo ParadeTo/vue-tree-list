@@ -3,9 +3,9 @@
         <button @click="addNode">Add Node</button>
         <vue-tree-list
           @click="onClick"
-          @change-name="onChange"
+          @change-name="onChangeName"
           @delete-node="onDel"
-          @add-node="onChange"
+          @add-node="onAddNode"
           :model="data"
           default-tree-node-name="new node"
           default-leaf-node-name="new leaf"
@@ -36,6 +36,10 @@
             id: 1,
             pid: 0,
             dragDisabled: true,
+            addTreeNodeDisabled: true,
+            addLeafNodeDisabled: true,
+            editNodeDisabled: true,
+            delNodeDisabled: true,
             children: [
               {
                 name: 'Node 1-2',
@@ -60,12 +64,21 @@
       }
     },
     methods: {
-      onDel (node) {
+      onDel (params) {
+        console.log(params)
         node.remove()
       },
 
-      onChange (data) {
-        console.log(data)
+      onChangeName (params) {
+        console.log(params)
+      },
+
+      onAddNode (params) {
+        console.log(params)
+      },
+
+      onClick (params) {
+        console.log(params)
       },
 
       addNode () {

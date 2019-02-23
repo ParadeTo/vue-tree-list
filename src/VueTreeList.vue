@@ -37,22 +37,22 @@
         </div>
         <input v-else class="vtl-input" type="text" ref="nodeInput" :value="model.name" @input="updateName" @blur="setUnEditable">
         <div class="vtl-operation" v-show="isHover">
-          <span title="add tree node" @click.stop.prevent="addChild(false)" v-if="!model.isLeaf">
+          <span title="add tree node" @click.stop.prevent="addChild(false)" v-if="!model.isLeaf && !model.addTreeNodeDisabled">
             <slot name="addTreeNode">
               <i class="vtl-icon vtl-icon-folder-plus-e"></i>
             </slot>
           </span>
-          <span title="add leaf node" @click.stop.prevent="addChild(true)" v-if="!model.isLeaf">
+          <span title="add leaf node" @click.stop.prevent="addChild(true)" v-if="!model.isLeaf && !model.addLeafNodeDisabled">
             <slot name="addLeafNode">
               <i class="vtl-icon vtl-icon-plus"></i>
             </slot>
           </span>
-          <span title="edit" @click.stop.prevent="setEditable">
+          <span title="edit" @click.stop.prevent="setEditable" v-if="!model.editNodeDisabled">
             <slot name="editNode">
               <i class="vtl-icon vtl-icon-edit"></i>
             </slot>
           </span>
-          <span title="delete" @click.stop.prevent="delNode">
+          <span title="delete" @click.stop.prevent="delNode" v-if="!model.delNodeDisabled">
             <slot name="delNode">
               <i class="vtl-icon vtl-icon-trash"></i>
             </slot>
