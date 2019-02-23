@@ -186,7 +186,7 @@ insertAfter | target: TreeNode | Move node after another node
 
 # events
 | name | params | description |
-|:-----:|:-------:|:------------:|:----:|
+|:-----:|:-------:|:----:|
 click | TreeNode | Trigger when clicking a tree node
 change-name | {'id', 'oldName', 'newName'} | Trigger after changing a node's name
 delete-node | TreeNode | Trigger when clicking `delNode` button. You can call `remove` of `TreeNode` to remove the node.
