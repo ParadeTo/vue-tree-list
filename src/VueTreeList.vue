@@ -36,8 +36,8 @@
              {{model.name}}
          </div>
         <input v-else class="vtl-input" type="text" ref="nodeInput" :value="model.name" @input="updateName" @blur="setUnEditable">
-          <span class="tag" :class="model.label.class" v-if="model.label">
-             {{model.label.text}}
+          <span v-for="label in model.labels"  :class="label.classes" >
+             {{label.text}}
           </span>
         <div class="vtl-operation" v-show="isHover">
           <span title="add tree node" @click.stop.prevent="addChild(false)" v-if="!model.isLeaf && !model.addTreeNodeDisabled">
