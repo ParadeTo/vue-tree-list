@@ -243,7 +243,7 @@
       },
       drop(e) {
         if (!fromComp) return
-        const oldParent = this.model.parent;
+        const oldParent = fromComp.model.parent;
         fromComp.model.moveInto(this.model)
         this.isDragEnterNode = false
         var node = this.getRootNode();
@@ -264,7 +264,7 @@
       },
       dropUp () {
         if (!fromComp) return
-        const oldParent = this.model.parent;
+        const oldParent = fromComp.model.parent;
         fromComp.model.insertBefore(this.model)
         this.isDragEnterUp = false
         var node = this.getRootNode();
