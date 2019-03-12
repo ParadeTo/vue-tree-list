@@ -245,6 +245,8 @@
         if (!fromComp) return
         fromComp.model.moveInto(this.model)
         this.isDragEnterNode = false
+        var node = this.getRootNode();
+        node.$emit('drop', fromComp.model)
       },
 
       dragEnterUp () {
@@ -263,6 +265,8 @@
         if (!fromComp) return
         fromComp.model.insertBefore(this.model)
         this.isDragEnterUp = false
+        var node = this.getRootNode();
+        node.$emit('dropup', fromComp.model)
       },
 
       dragEnterBottom () {
