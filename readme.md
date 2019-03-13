@@ -173,6 +173,7 @@ addLeafNodeDisabled | boolean | false | Show `addLeafNode` button or not
 editNodeDisabled | boolean | false | Show `editNode` button or not
 delNodeDisabled | boolean | false | Show `delNode` button or not
 children | array | null | The children of node
+labels | array\<Label\> | null | Additional labels to show with the node
 
 ### methods
 | name | params | description |
@@ -183,6 +184,13 @@ remove | - | Remove node from the tree
 moveInto | target: TreeNode | Move node into another node
 insertBefore | target: TreeNode | Move node before another node
 insertAfter | target: TreeNode | Move node after another node
+
+## props of Label
+### attributes
+| name | type | default | description |
+|:-----:|:-------:|:------------:|:----:|
+text | string | null | The text of the label
+classes | string | null | The css classes to apply
 
 # events
 | name | params | description |
