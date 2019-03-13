@@ -285,8 +285,11 @@
       },
       dropBottom () {
         if (!fromComp) return
+        const oldParent = fromComp.model.parent;
         fromComp.model.insertAfter(this.model)
         this.isDragEnterBottom = false
+        var node = this.getRootNode();
+        node.$emit('drop', {node: fromComp.model, oldParent: oldParent})
       },
       getRootNode() {
         var node = this.$parent
