@@ -271,7 +271,7 @@
         fromComp.model.insertBefore(this.model)
         this.isDragEnterUp = false
         var node = this.getRootNode();
-        node.$emit('dropup', {node: fromComp.model, oldParent: oldParent})
+        node.$emit('drop-up', {node: fromComp.model, oldParent: oldParent})
       },
 
       dragEnterBottom () {
@@ -288,8 +288,11 @@
       },
       dropBottom () {
         if (!fromComp) return
+        const oldParent = fromComp.model.parent;
         fromComp.model.insertAfter(this.model)
         this.isDragEnterBottom = false
+        var node = this.getRootNode();
+        node.$emit('drop-bottom', {node: fromComp.model, oldParent: oldParent})
       },
       getRootNode() {
         var node = this.$parent
