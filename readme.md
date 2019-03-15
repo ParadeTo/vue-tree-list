@@ -191,6 +191,8 @@ click | TreeNode | Trigger when clicking a tree node
 change-name | {'id', 'oldName', 'newName'} | Trigger after changing a node's name
 delete-node | TreeNode | Trigger when clicking `delNode` button. You can call `remove` of `TreeNode` to remove the node.
 add-node | TreeNode | Trigger after adding a new node
+drop | {'node', 'oldParent'} | Trigger after dropping a node into another
+drop-up | {'node', 'oldParent'} | Trigger after extracting a node from another
 
 # customize operation icons
 The component has default icons for `addTreeNode`, `addLeafNode`, `editNode`, `delNode` button, but you can also customize them:

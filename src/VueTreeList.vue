@@ -244,8 +244,11 @@
       },
       drop(e) {
         if (!fromComp) return
+        const oldParent = fromComp.model.parent;
         fromComp.model.moveInto(this.model)
         this.isDragEnterNode = false
+        var node = this.getRootNode();
+        node.$emit('drop', {node: fromComp.model, oldParent: oldParent})
       },
 
       dragEnterUp () {
@@ -262,8 +265,11 @@
       },
       dropUp () {
         if (!fromComp) return
+        const oldParent = fromComp.model.parent;
         fromComp.model.insertBefore(this.model)
         this.isDragEnterUp = false
+        var node = this.getRootNode();
+        node.$emit('drop-up', {node: fromComp.model, oldParent: oldParent})
       },
 
       dragEnterBottom () {
@@ -280,8 +286,11 @@
       },
       dropBottom () {
         if (!fromComp) return
+        const oldParent = fromComp.model.parent;
         fromComp.model.insertAfter(this.model)
         this.isDragEnterBottom = false
+        var node = this.getRootNode();
+        node.$emit('drop-bottom', {node: fromComp.model, oldParent: oldParent})
       },
       getRootNode() {
         var node = this.$parent
