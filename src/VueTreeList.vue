@@ -181,8 +181,9 @@
       setEditable () {
         this.editable = true
         this.$nextTick(() => {
-          this.$refs.nodeInput.focus()
-//          fireFocusEvent(this.$refs.nodeInput)
+          const $input = this.$refs.nodeInput
+          $input.focus()
+          $input.setSelectionRange(0, $input.value.length)
         })
       },
 

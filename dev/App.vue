@@ -64,8 +64,8 @@
       }
     },
     methods: {
-      onDel (params) {
-        console.log(params)
+      onDel (node) {
+        console.log(node)
         node.remove()
       },
 
