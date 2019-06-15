@@ -120,10 +120,7 @@ A vue component for tree structure. Support adding treenode/leafnode, editing no
 
         vm.newTree = _dfs(vm.data)
       },
-
-      onClick(model) {
-        console.log(model)
-      }
+      
     }
   }
 </script>
