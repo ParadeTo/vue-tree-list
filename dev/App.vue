@@ -6,6 +6,9 @@
           @change-name="onChangeName"
           @delete-node="onDel"
           @add-node="onAddNode"
+          @drop="drop"
+          @drop-before="dropBefore"
+          @drop-after="dropAfter"
           :model="data"
           default-tree-node-name="new node"
           default-leaf-node-name="new leaf"
@@ -79,6 +82,18 @@
 
       onClick (params) {
         console.log(params)
+      },
+
+      drop: function ({node, src, target}) {
+        console.log('drop', node, src, target)
+      },
+
+      dropBefore: function ({node, src, target}) {
+        console.log('drop-before', node, src, target)
+      },
+
+      dropAfter: function ({node, src, target}) {
+        console.log('drop-after', node, src, target)
       },
 
       addNode () {

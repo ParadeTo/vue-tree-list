@@ -2,7 +2,7 @@
   <div class='vtl'>
     <div v-if="model.name !== 'root'">
       <div class="vtl-border vtl-up" :class="{'vtl-active': isDragEnterUp}"
-        @drop="dropUp"
+        @drop="dropBefore"
         @dragenter="dragEnterUp"
         @dragover='dragOverUp'
         @dragleave="dragLeaveUp"></div>
@@ -63,7 +63,7 @@
       <div v-if="model.children && model.children.length > 0 && expanded"
         class="vtl-border vtl-bottom"
         :class="{'vtl-active': isDragEnterBottom}"
-        @drop="dropBottom"
+        @drop="dropAfter"
         @dragenter="dragEnterBottom"
         @dragover='dragOverBottom'
         @dragleave="dragLeaveBottom"></div>
@@ -89,7 +89,7 @@
   import { Tree, TreeNode } from './Tree.js'
   import { addHandler, removeHandler } from './tools.js'
 
-  let fromComp = null
+  let compInOperation = null
 
   export default {
     data: function () {
@@ -219,7 +219,7 @@
 
       dragStart(e) {
         if (!(this.model.dragDisabled || this.model.disabled)) {
-          fromComp = this
+          compInOperation = this
           // for firefox
           e.dataTransfer.setData("data","data");
           e.dataTransfer.effectAllowed = 'move'
@@ -228,14 +228,14 @@
         return false
       },
       dragEnd(e) {
-        fromComp = null
+        compInOperation = null
       },
       dragOver(e) {
         e.preventDefault()
         return true
       },
       dragEnter(e) {
-        if (!fromComp) return
+        if (!compInOperation) return
         if (this.model.isLeaf) return
         this.isDragEnterNode = true
       },
@@ -243,16 +243,16 @@
         this.isDragEnterNode = false
       },
       drop(e) {
-        if (!fromComp) return
-        const oldParent = fromComp.model.parent;
-        fromComp.model.moveInto(this.model)
+        if (!compInOperation) return
+        const oldParent = compInOperation.model.parent;
+        compInOperation.model.moveInto(this.model)
         this.isDragEnterNode = false
         var node = this.getRootNode();
-        node.$emit('drop', {node: fromComp.model, oldParent: oldParent})
+        node.$emit('drop', {target: this.model, node: compInOperation.model, src: oldParent})
       },
 
       dragEnterUp () {
-        if (!fromComp) return
+        if (!compInOperation) return
         this.isDragEnterUp = true
       },
       dragOverUp (e) {
@@ -260,20 +260,20 @@
         return true
       },
       dragLeaveUp () {
-        if (!fromComp) return
+        if (!compInOperation) return
         this.isDragEnterUp = false
       },
-      dropUp () {
-        if (!fromComp) return
-        const oldParent = fromComp.model.parent;
-        fromComp.model.insertBefore(this.model)
+      dropBefore () {
+        if (!compInOperation) return
+        const oldParent = compInOperation.model.parent;
+        compInOperation.model.insertBefore(this.model)
         this.isDragEnterUp = false
         var node = this.getRootNode();
-        node.$emit('drop-up', {node: fromComp.model, oldParent: oldParent})
+        node.$emit('drop-before', {target: this.model, node: compInOperation.model, src: oldParent})
       },
 
       dragEnterBottom () {
-        if (!fromComp) return
+        if (!compInOperation) return
         this.isDragEnterBottom = true
       },
       dragOverBottom (e) {
@@ -281,16 +281,16 @@
         return true
       },
       dragLeaveBottom () {
-        if (!fromComp) return
+        if (!compInOperation) return
         this.isDragEnterBottom = false
       },
-      dropBottom () {
-        if (!fromComp) return
-        const oldParent = fromComp.model.parent;
-        fromComp.model.insertAfter(this.model)
+      dropAfter () {
+        if (!compInOperation) return
+        const oldParent = compInOperation.model.parent;
+        compInOperation.model.insertAfter(this.model)
         this.isDragEnterBottom = false
         var node = this.getRootNode();
-        node.$emit('drop-bottom', {node: fromComp.model, oldParent: oldParent})
+        node.$emit('drop-after', {target: this.model, node: compInOperation.model, src: oldParent})
       },
       getRootNode() {
         var node = this.$parent
