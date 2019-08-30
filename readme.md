@@ -8,30 +8,31 @@ A vue component for tree structure. Support adding treenode/leafnode, editing no
 # use
 ``npm install vue-tree-list``
 
-```javascript
+```html
 <template>
-    <div>
-        <button @click="addNode">Add Node</button>
-        <vue-tree-list
-          @click="onClick"
-          @change-name="onChangeName"
-          @delete-node="onDel"
-          @add-node="onAddNode"
-          :model="data"
-          default-tree-node-name="new node"
-          default-leaf-node-name="new leaf"
-          v-bind:default-expanded="false">
-          <span class="icon" slot="addTreeNode">addTreeNode</span>
-          <span class="icon" slot="addLeafNode">addLeafNode</span>
-          <span class="icon" slot="editNode">editNode</span>
-          <span class="icon" slot="delNode">delNode</span>
-        </vue-tree-list>
-        <button @click="getNewTree">Get new tree</button>
-        <pre>
-          {{newTree}}
-        </pre>
-    </div>
+  <div>
+    <button @click="addNode">Add Node</button>
+    <vue-tree-list
+      @click="onClick"
+      @change-name="onChangeName"
+      @delete-node="onDel"
+      @add-node="onAddNode"
+      :model="data"
+      default-tree-node-name="new node"
+      default-leaf-node-name="new leaf"
+      v-bind:default-expanded="false">
+      <span class="icon" slot="addTreeNode">addTreeNode</span>
+      <span class="icon" slot="addLeafNode">addLeafNode</span>
+      <span class="icon" slot="editNode">editNode</span>
+      <span class="icon" slot="delNode">delNode</span>
+    </vue-tree-list>
+    <button @click="getNewTree">Get new tree</button>
+    <pre>
+      {{newTree}}
+    </pre>
+  </div>
 </template>
+
 <script>
   import { VueTreeList, Tree, TreeNode } from 'vue-tree-list'
   export default {
@@ -124,6 +125,7 @@ A vue component for tree structure. Support adding treenode/leafnode, editing no
     }
   }
 </script>
+
 <style lang="less" rel="stylesheet/less">
   .vtl {
     .vtl-drag-disabled {
