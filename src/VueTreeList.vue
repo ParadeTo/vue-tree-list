@@ -21,12 +21,12 @@
           <i class="vtl-icon" :class="caretClass" @click.prevent.stop="toggle"></i>
         </span>
 
-        <span v-if="model.isLeaf">
+        <span v-if="model.isLeaf" class="leafNode">
           <slot name="leafNodeIcon">
             <i class="vtl-icon vtl-menu-icon vtl-icon-file"></i>
           </slot>
         </span>
-        <span v-else>
+        <span v-else class="folderNode">
           <slot name="treeNodeIcon">
             <i class="vtl-icon vtl-menu-icon vtl-icon-folder"></i>
           </slot>
