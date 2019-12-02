@@ -23,12 +23,14 @@
 
         <span v-if="model.isLeaf">
           <slot name="leafNodeIcon">
-            <i class="vtl-icon vtl-menu-icon vtl-icon-file"></i>
+            <i v-if="!model.icon" class="vtl-icon vtl-menu-icon vtl-icon-file"/>
+            <i v-else :class="itemIconClass"/>
           </slot>
         </span>
         <span v-else>
           <slot name="treeNodeIcon">
-            <i class="vtl-icon vtl-menu-icon vtl-icon-folder"></i>
+            <i v-if="!model.icon" class="vtl-icon vtl-menu-icon vtl-icon-folder"/>
+            <i v-else :class="itemIconClass"/>
           </slot>
         </span>
 
@@ -121,7 +123,12 @@
     },
     computed: {
       itemIconClass () {
-        return this.model.isLeaf ? 'vtl-icon-file' : 'vtl-icon-folder'
+        console.log(this.model.icon);
+        let response = this.model.isLeaf ? 'vtl-icon-file' : 'vtl-icon-folder';
+        if (this.model.icon) {
+          response = this.model.icon;
+        }
+        return response
       },
 
       caretClass () {

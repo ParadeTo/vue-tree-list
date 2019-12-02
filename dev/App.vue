@@ -45,10 +45,11 @@
             delNodeDisabled: true,
             children: [
               {
-                name: 'Node 1-2',
+                name: 'PETER',
                 id: 2,
                 isLeaf: true,
-                pid: 1
+                pid: 1,
+                icon: "hallo"
               }
             ]
           },
