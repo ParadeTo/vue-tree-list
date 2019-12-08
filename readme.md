@@ -21,10 +21,12 @@ A vue component for tree structure. Support adding treenode/leafnode, editing no
       default-tree-node-name="new node"
       default-leaf-node-name="new leaf"
       v-bind:default-expanded="false">
-      <span class="icon" slot="addTreeNode">addTreeNode</span>
-      <span class="icon" slot="addLeafNode">addLeafNode</span>
-      <span class="icon" slot="editNode">editNode</span>
-      <span class="icon" slot="delNode">delNode</span>
+      <span class="icon" slot="addTreeNodeIcon">📂</span>
+      <span class="icon" slot="addLeafNodeIcon">＋</span>
+      <span class="icon" slot="editNodeIcon">📃</span>
+      <span class="icon" slot="delNodeIcon">✂️</span>
+      <span class="icon" slot="leafNodeIcon">🍃</span>
+      <span class="icon" slot="treeNodeIcon">🌲</span>
     </vue-tree-list>
     <button @click="getNewTree">Get new tree</button>
     <pre>
@@ -195,11 +197,13 @@ drop-before | {node, src, target} | Trigger after dropping a node before another
 drop-after | {node, src, target} | Trigger after dropping a node after another. node: the draggable node, src: the draggable node's parent, target: the node that draggable node will drop after
 
 # customize operation icons
-The component has default icons for `addTreeNode`, `addLeafNode`, `editNode`, `delNode` button, but you can also customize them:
+The component has default icons for `addTreeNodeIcon`, `addLeafNodeIcon`, `editNodeIcon`, `delNodeIcon`, `leafNodeIcon`, `treeNodeIcon` button, but you can also customize them:
 
 ```html
-<span class="icon" slot="addTreeNode">addTreeNode</span>
-<span class="icon" slot="addLeafNode">addLeafNode</span>
-<span class="icon" slot="editNode">editNode</span>
-<span class="icon" slot="delNode">delNode</span>
+      <span class="icon" slot="addTreeNodeIcon">📂</span>
+      <span class="icon" slot="addLeafNodeIcon">＋</span>
+      <span class="icon" slot="editNodeIcon">📃</span>
+      <span class="icon" slot="delNodeIcon">✂️</span>
+      <span class="icon" slot="leafNodeIcon">🍃</span>
+      <span class="icon" slot="treeNodeIcon">🌲</span>
 ```

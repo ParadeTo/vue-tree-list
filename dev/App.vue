@@ -13,10 +13,12 @@
           default-tree-node-name="new node"
           default-leaf-node-name="new leaf"
           v-bind:default-expanded="false">
-          <span class="icon" slot="addTreeNode">addTreeNode</span>
-          <span class="icon" slot="addLeafNode">addLeafNode</span>
-          <span class="icon" slot="editNode">editNode</span>
-          <span class="icon" slot="delNode">delNode</span>
+          <span class="icon" slot="addTreeNodeIcon">📂</span>
+          <span class="icon" slot="addLeafNodeIcon">＋</span>
+          <span class="icon" slot="editNodeIcon">📃</span>
+          <span class="icon" slot="delNodeIcon">✂️</span>
+          <span class="icon" slot="leafNodeIcon">🍃</span>
+          <span class="icon" slot="treeNodeIcon">🌲</span>
         </vue-tree-list>
         <button @click="getNewTree">Get new tree</button>
         <pre>

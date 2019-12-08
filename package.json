@@ -42,6 +42,7 @@
     "chai": "^3.5.0",
     "cross-env": "^5.0.1",
     "css-loader": "^0.26.2",
+    "cz-conventional-changelog": "^2.1.0",
     "file-loader": "^0.10.1",
     "html-webpack-plugin": "^2.8.1",
     "husky": "^1.2.0",
@@ -61,8 +62,5 @@
     "webpack": "^1.13.2",
     "webpack-dev-server": "1.14.0",
     "webpack-merge": "^0.14.1"
-  },
-  "dependencies": {
-    "cz-conventional-changelog": "^2.1.0"
   }
 }

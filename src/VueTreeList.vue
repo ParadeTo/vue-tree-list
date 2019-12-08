@@ -38,22 +38,22 @@
         <input v-else class="vtl-input" type="text" ref="nodeInput" :value="model.name" @input="updateName" @blur="setUnEditable">
         <div class="vtl-operation" v-show="isHover">
           <span title="add tree node" @click.stop.prevent="addChild(false)" v-if="!model.isLeaf && !model.addTreeNodeDisabled">
-            <slot name="addTreeNode">
+            <slot name="addTreeNodeIcon">
               <i class="vtl-icon vtl-icon-folder-plus-e"></i>
             </slot>
           </span>
           <span title="add leaf node" @click.stop.prevent="addChild(true)" v-if="!model.isLeaf && !model.addLeafNodeDisabled">
-            <slot name="addLeafNode">
+            <slot name="addLeafNodeIcon">
               <i class="vtl-icon vtl-icon-plus"></i>
             </slot>
           </span>
           <span title="edit" @click.stop.prevent="setEditable" v-if="!model.editNodeDisabled">
-            <slot name="editNode">
+            <slot name="editNodeIcon">
               <i class="vtl-icon vtl-icon-edit"></i>
             </slot>
           </span>
           <span title="delete" @click.stop.prevent="delNode" v-if="!model.delNodeDisabled">
-            <slot name="delNode">
+            <slot name="delNodeIcon">
               <i class="vtl-icon vtl-icon-trash"></i>
             </slot>
           </span>
@@ -76,10 +76,10 @@
         v-bind:default-expanded="defaultExpanded"
         :model="model"
         :key='model.id'>
-          <slot name="addTreeNode" slot="addTreeNode" />
-          <slot name="addLeafNode" slot="addLeafNode" />
-          <slot name="editNode" slot="editNode" />
-          <slot name="delNode" slot="delNode" />
+          <slot name="addTreeNodeIcon" slot="addTreeNodeIcon" />
+          <slot name="addLeafNodeIcon" slot="addLeafNodeIcon" />
+          <slot name="editNodeIcon" slot="editNodeIcon" />
+          <slot name="delNodeIcon" slot="delNodeIcon" />
           <slot name="leafNodeIcon" slot="leafNodeIcon" />
           <slot name="treeNodeIcon" slot="treeNodeIcon" />
       </item>
