@@ -80,6 +80,8 @@
           <slot name="addLeafNode" slot="addLeafNode" />
           <slot name="editNode" slot="editNode" />
           <slot name="delNode" slot="delNode" />
+          <slot name="leafNodeIcon" slot="leafNodeIcon" />
+          <slot name="treeNodeIcon" slot="treeNodeIcon" />
       </item>
     </div>
   </div>
