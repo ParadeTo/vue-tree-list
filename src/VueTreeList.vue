@@ -88,12 +88,15 @@
 </template>
 
 <script>
-  import { Tree, TreeNode } from './Tree.js'
+  import { TreeNode } from './Tree.js'
   import { addHandler, removeHandler } from './tools.js'
 
   let compInOperation = null
 
   export default {
+    components: {
+      item: () => import('./VueTreeList')
+    },
     data: function () {
       return {
         isHover: false,
@@ -196,12 +199,12 @@
         }
       },
 
-      mouseOver(e) {
+      mouseOver() {
         if (this.model.disabled) return
         this.isHover = true
       },
 
-      mouseOut(e) {
+      mouseOut() {
         this.isHover = false
       },
 
@@ -229,22 +232,22 @@
         }
         return false
       },
-      dragEnd(e) {
+      dragEnd() {
         compInOperation = null
       },
       dragOver(e) {
         e.preventDefault()
         return true
       },
-      dragEnter(e) {
+      dragEnter() {
         if (!compInOperation) return
         if (this.model.isLeaf) return
         this.isDragEnterNode = true
       },
-      dragLeave(e) {
+      dragLeave() {
         this.isDragEnterNode = false
       },
-      drop(e) {
+      drop() {
         if (!compInOperation) return
         const oldParent = compInOperation.model.parent;
         compInOperation.model.moveInto(this.model)
@@ -301,9 +304,6 @@
         }
         return node;
       }
-    },
-    beforeCreate () {
-      this.$options.components.item = require('./VueTreeList.vue')
     }
   }
 </script>
