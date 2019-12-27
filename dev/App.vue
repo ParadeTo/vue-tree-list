@@ -125,10 +125,6 @@
         }
 
         vm.newTree = _dfs(vm.data)
-      },
-
-      onClick(model) {
-        console.log(model)
       }
     }
   }
