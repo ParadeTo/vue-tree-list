@@ -94,9 +94,6 @@
   let compInOperation = null
 
   export default {
-    components: {
-      item: () => import('./VueTreeList')
-    },
     data: function () {
       return {
         isHover: false,
@@ -154,6 +151,9 @@
           'vtl-disabled': disabled
         }
       }
+    },
+    beforeCreate () {
+      this.$options.components.item = require('./VueTreeList').default
     },
     mounted () {
       const vm = this
