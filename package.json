@@ -2,28 +2,16 @@
   "name": "vue-tree-list",
   "version": "1.4.0",
   "description": "A vue component for tree structure. Support adding treenode/leafnode, editing node's name and dragging.",
-  "main": "dist/vue-tree-list.umd.min.js",
+  "author": "ayou",
   "scripts": {
-    "commit": "npx git-cz",
     "serve": "vue-cli-service serve dev",
     "build": "vue-cli-service build --target lib src/index.js",
+    "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
+    "commit": "npx git-cz",
     "prepublish": "npm run build"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ParadeTo/vue-tree-list.git"
-  },
-  "keywords": [
-    "vue",
-    "tree"
-  ],
-  "author": "ayou",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ParadeTo/vue-tree-list/issues"
-  },
-  "homepage": "https://github.com/ParadeTo/vue-tree-list#readme",
+  "main": "dist/vue-tree-list.umd.min.js",
   "dependencies": {
     "core-js": "^3.4.3",
     "vue": "^2.6.10"
@@ -31,7 +19,9 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.1.0",
     "@vue/cli-plugin-eslint": "^4.1.0",
+    "@vue/cli-plugin-unit-jest": "^4.1.1",
     "@vue/cli-service": "^4.1.0",
+    "@vue/test-utils": "1.0.0-beta.29",
     "babel-eslint": "^10.0.3",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
@@ -53,10 +43,34 @@
     },
     "parserOptions": {
       "parser": "babel-eslint"
-    }
+    },
+    "overrides": [
+      {
+        "files": [
+          "**/__tests__/*.{j,t}s?(x)",
+          "**/tests/unit/**/*.spec.{j,t}s?(x)"
+        ],
+        "env": {
+          "jest": true
+        }
+      }
+    ]
   },
   "browserslist": [
     "> 1%",
     "last 2 versions"
-  ]
+  ],
+  "bugs": {
+    "url": "https://github.com/ParadeTo/vue-tree-list/issues"
+  },
+  "homepage": "https://github.com/ParadeTo/vue-tree-list#readme",
+  "keywords": [
+    "vue",
+    "tree"
+  ],
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ParadeTo/vue-tree-list.git"
+  }
 }
