@@ -12,4 +12,4 @@ jobs:
         run: |
           npm install
           npm run lint
-          npm run test:unit
+          npm run test:coverage
