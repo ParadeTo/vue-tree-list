@@ -1,3 +1,5 @@
+[![Actions Status](https://github.com/ParadeTo/vue-tree-list/workflows/Test/badge.svg)](https://github.com/ParadeTo/vue-tree-list/actions)
+
 # vue-tree-list
 A vue component for tree structure. Support adding treenode/leafnode, editing node's name and dragging.
 
