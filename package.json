@@ -6,7 +6,8 @@
   "scripts": {
     "serve": "vue-cli-service serve dev",
     "build": "vue-cli-service build --target lib src/index.js",
-    "test:unit": "vue-cli-service test:unit",
+    "test:unit": "vue-cli-service test:unit --watch",
+    "test:coverage": "vue-cli-service test:unit --coverage",
     "lint": "vue-cli-service lint",
     "commit": "npx git-cz",
     "prepublish": "npm run build"
