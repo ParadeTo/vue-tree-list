@@ -1,12 +1,17 @@
 <template>
   <div class='vtl'>
-    <div v-if="model.name !== 'root'">
+    <div
+      v-if="model.name !== 'root'"
+      :id='model.id'
+      class="vtl-node"
+      :class="{'vtl-leaf-node': model.isLeaf, 'vtl-tree-node': ! model.isLeaf}"
+    >
       <div class="vtl-border vtl-up" :class="{'vtl-active': isDragEnterUp}"
         @drop="dropBefore"
         @dragenter="dragEnterUp"
         @dragover='dragOverUp'
-        @dragleave="dragLeaveUp"></div>
-      <div :id='model.id' :class="treeNodeClass"
+        @dragleave="dragLeaveUp" />
+      <div :class="treeNodeClass"
         :draggable="!model.dragDisabled"
         @dragstart='dragStart'
         @dragover='dragOver'
@@ -73,7 +78,7 @@
       <item v-for="model in model.children"
         :default-tree-node-name="defaultTreeNodeName"
         :default-leaf-node-name="defaultLeafNodeName"
-        v-bind:default-expanded="defaultExpanded"
+        :default-expanded="defaultExpanded"
         :model="model"
         :key='model.id'>
           <slot name="addTreeNodeIcon" slot="addTreeNodeIcon" />
@@ -122,10 +127,6 @@
       }
     },
     computed: {
-      itemIconClass () {
-        return this.model.isLeaf ? 'vtl-icon-file' : 'vtl-icon-folder'
-      },
-
       caretClass () {
         return this.expanded ? 'vtl-icon-caret-down' : 'vtl-icon-caret-right'
       },
@@ -145,7 +146,7 @@
         } = this
 
         return {
-          'vtl-tree-node': true,
+          'vtl-node-main': true,
           'vtl-active': isDragEnterNode,
           'vtl-drag-disabled': dragDisabled,
           'vtl-disabled': disabled
@@ -385,7 +386,7 @@
     }
   }
 
-  .vtl-tree-node {
+  .vtl-node-main {
     display: flex;
     align-items: center;
     padding: 5px 0 5px 1rem;

@@ -115,7 +115,7 @@ TreeNode.prototype._beforeInsert = function (target) {
     return false
   }
 
-  // cannot move ancestor to child
+  // cannot insert ancestor to child
   if (this.isTargetChild(target)) {
     return false
   }

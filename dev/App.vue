@@ -70,31 +70,38 @@
     },
     methods: {
       onDel (node) {
+        // eslint-disable-next-line no-console
         console.log(node)
         node.remove()
       },
 
       onChangeName (params) {
+        // eslint-disable-next-line no-console
         console.log(params)
       },
 
       onAddNode (params) {
+        // eslint-disable-next-line no-console
         console.log(params)
       },
 
       onClick (params) {
+        // eslint-disable-next-line no-console
         console.log(params)
       },
 
       drop: function ({node, src, target}) {
+        // eslint-disable-next-line no-console
         console.log('drop', node, src, target)
       },
 
       dropBefore: function ({node, src, target}) {
+        // eslint-disable-next-line no-console
         console.log('drop-before', node, src, target)
       },
 
       dropAfter: function ({node, src, target}) {
+        // eslint-disable-next-line no-console
         console.log('drop-after', node, src, target)
       },
 

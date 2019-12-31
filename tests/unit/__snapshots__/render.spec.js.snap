@@ -1,13 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`VueTreeList renders correctly 1`] = `
+exports[`Render render correctly 1`] = `
 <div class="vtl">
   <!---->
   <div class="">
     <div class="vtl">
-      <div>
+      <div id="1" class="vtl-node vtl-tree-node">
         <div class="vtl-border vtl-up"></div>
-        <div id="1" draggable="false" class="vtl-tree-node vtl-drag-disabled"><span class="vtl-caret vtl-is-small"><i class="vtl-icon vtl-icon-caret-right"></i></span> <span><i class="vtl-icon vtl-menu-icon vtl-icon-folder"></i></span>
+        <div draggable="false" class="vtl-node-main vtl-drag-disabled"><span class="vtl-caret vtl-is-small"><i class="vtl-icon vtl-icon-caret-right"></i></span> <span><i class="vtl-icon vtl-menu-icon vtl-icon-folder"></i></span>
           <div class="vtl-node-content">
             Node 1
           </div>
@@ -22,9 +22,9 @@ exports[`VueTreeList renders correctly 1`] = `
       </div>
       <div class="vtl-tree-margin" style="display: none;">
         <div class="vtl">
-          <div>
+          <div id="2" class="vtl-node vtl-leaf-node">
             <div class="vtl-border vtl-up"></div>
-            <div id="2" draggable="true" class="vtl-tree-node">
+            <div draggable="true" class="vtl-node-main">
               <!----> <span><i class="vtl-icon vtl-menu-icon vtl-icon-file"></i></span>
               <div class="vtl-node-content">
                 Node 1-2
@@ -40,9 +40,9 @@ exports[`VueTreeList renders correctly 1`] = `
       </div>
     </div>
     <div class="vtl">
-      <div>
+      <div id="3" class="vtl-node vtl-tree-node">
         <div class="vtl-border vtl-up"></div>
-        <div id="3" draggable="true" class="vtl-tree-node vtl-disabled">
+        <div draggable="true" class="vtl-node-main vtl-disabled">
           <!----> <span><i class="vtl-icon vtl-menu-icon vtl-icon-folder"></i></span>
           <div class="vtl-node-content">
             Node 2
@@ -54,9 +54,9 @@ exports[`VueTreeList renders correctly 1`] = `
       <!---->
     </div>
     <div class="vtl">
-      <div>
+      <div id="4" class="vtl-node vtl-tree-node">
         <div class="vtl-border vtl-up"></div>
-        <div id="4" draggable="true" class="vtl-tree-node">
+        <div draggable="true" class="vtl-node-main">
           <!----> <span><i class="vtl-icon vtl-menu-icon vtl-icon-folder"></i></span>
           <div class="vtl-node-content">
             Node 3
