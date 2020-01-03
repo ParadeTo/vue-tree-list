@@ -199,13 +199,26 @@ drop-before | {node, src, target} | Trigger after dropping a node before another
 drop-after | {node, src, target} | Trigger after dropping a node after another. node: the draggable node, src: the draggable node's parent, target: the node that draggable node will drop after
 
 # customize operation icons
-The component has default icons for `addTreeNodeIcon`, `addLeafNodeIcon`, `editNodeIcon`, `delNodeIcon`, `leafNodeIcon`, `treeNodeIcon` button, but you can also customize them:
+The component has default icons for `addTreeNodeIcon`, `addLeafNodeIcon`, `editNodeIcon`, `delNodeIcon`, `leafNodeIcon`, `treeNodeIcon` button, but you can also customize them and can access `model`, `root`, `expanded` as below:
 
 ```html
-      <span class="icon" slot="addTreeNodeIcon">📂</span>
-      <span class="icon" slot="addLeafNodeIcon">＋</span>
-      <span class="icon" slot="editNodeIcon">📃</span>
-      <span class="icon" slot="delNodeIcon">✂️</span>
-      <span class="icon" slot="leafNodeIcon">🍃</span>
-      <span class="icon" slot="treeNodeIcon">🌲</span>
+<template v-slot:addTreeNodeIcon="slotProps">
+  <span class="icon">📂</span>
+</template>
+<template v-slot:addLeafNodeIcon="slotProps">
+  <span class="icon">＋</span>
+</template>
+<template v-slot:editNodeIcon="slotProps">
+  <span class="icon">📃</span>
+</template>
+<template v-slot:delNodeIcon="slotProps">
+  <span class="icon">✂️</span>
+</template>
+<template v-slot:leafNodeIcon="slotProps">
+  <span class="icon">🍃</span>
+</template>
+<template v-slot:treeNodeIcon="slotProps">
+  <span class="icon">
+    {{ (slotProps.model.children && slotProps.model.children.length > 0 && !slotProps.expanded) ? '🌲' : '' }}</span>
+</template>
 ```
