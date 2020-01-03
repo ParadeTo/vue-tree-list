@@ -32,7 +32,7 @@
           </slot>
         </span>
         <span v-else>
-          <slot name="treeNodeIcon">
+          <slot name="treeNodeIcon" :expanded="expanded">
             <i class="vtl-icon vtl-menu-icon vtl-icon-folder"></i>
           </slot>
         </span>
@@ -86,7 +86,9 @@
           <slot name="editNodeIcon" slot="editNodeIcon" />
           <slot name="delNodeIcon" slot="delNodeIcon" />
           <slot name="leafNodeIcon" slot="leafNodeIcon" />
-          <slot name="treeNodeIcon" slot="treeNodeIcon" />
+          <template v-slot:treeNodeIcon="slotProps">
+            <slot name="treeNodeIcon" v-bind="slotProps" />
+          </template>
       </item>
     </div>
   </div>
