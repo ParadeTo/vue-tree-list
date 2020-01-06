@@ -4,7 +4,7 @@
 
 var handlerCache
 
-exports.addHandler = function (element, type, handler) {
+export const addHandler = function (element, type, handler) {
   handlerCache = handler
   if (element.addEventListener) {
     element.addEventListener(type, handler, false)
@@ -15,7 +15,7 @@ exports.addHandler = function (element, type, handler) {
   }
 }
 
-exports.removeHandler = function (element, type) {
+export const removeHandler = function (element, type) {
   if (element.removeEventListener) {
     element.removeEventListener(type, handlerCache, false)
   } else if (element.detachEvent) {
@@ -25,7 +25,21 @@ exports.removeHandler = function (element, type) {
   }
 }
 
-// exports.fireFocusEvent = function (ele) {
-//   var event = new FocusEvent()
-//   ele.dispatch(event)
-// }
+// depth first search
+export const traverseTree = (root) => {
+  var newRoot = {}
+
+  for (var k in root) {
+    if (k !== 'children' && k !== 'parent') {
+      newRoot[k] = root[k]
+    }
+  }
+
+  if (root.children && root.children.length > 0) {
+    newRoot.children = []
+    for (var i = 0, len = root.children.length; i < len; i++) {
+      newRoot.children.push(traverseTree(root.children[i]))
+    }
+  }
+  return newRoot
+}
