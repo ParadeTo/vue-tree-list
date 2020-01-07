@@ -185,6 +185,7 @@ import {addHandler, removeHandler} from './tools.js'
 let compInOperation = null
 
 export default {
+  name: 'vue-tree-list',
   data: function() {
     return {
       isHover: false,

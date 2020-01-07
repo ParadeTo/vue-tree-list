@@ -7,6 +7,19 @@ A vue component for tree structure. Support adding treenode/leafnode, editing no
 
 [Live Demo](http://paradeto.com/vue-tree-list/)
 
+# install
+
+Install the plugin then you can use the component globally.
+
+```js
+import Vue from 'vue'
+import VueTreeList from 'vue-tree-list'
+
+Vue.use(VueTreeList)
+```
+
+Or just register locally like the example below.
+
 # use
 ``npm install vue-tree-list``
 
