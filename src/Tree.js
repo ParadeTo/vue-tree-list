@@ -1,4 +1,4 @@
-import {traverseTree} from './tools'
+import { traverseTree } from './tools'
 /**
  * Tree data struct
  * Created by ayou on 2017/7/20.
@@ -11,7 +11,7 @@ import {traverseTree} from './tools'
  */
 export class TreeNode {
   constructor(data) {
-    const {id, isLeaf} = data
+    const { id, isLeaf } = data
     this.id = typeof id === 'undefined' ? new Date().valueOf() : id
     this.parent = null
     this.children = null
@@ -149,7 +149,7 @@ export class TreeNode {
 
 export class Tree {
   constructor(data) {
-    this.root = new TreeNode({name: 'root', isLeaf: false, id: 0})
+    this.root = new TreeNode({ name: 'root', isLeaf: false, id: 0 })
     this.initNode(this.root, data)
     return this.root
   }

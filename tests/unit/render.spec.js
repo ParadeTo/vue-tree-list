@@ -1,5 +1,5 @@
-import {mount} from '@vue/test-utils'
-import {Tree, VueTreeList} from '@/index'
+import { mount } from '@vue/test-utils'
+import { Tree, VueTreeList } from '@/index'
 
 describe('Render', () => {
   it('render correctly', () => {

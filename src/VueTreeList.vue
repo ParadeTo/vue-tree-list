@@ -4,11 +4,11 @@
       v-if="model.name !== 'root'"
       :id="model.id"
       class="vtl-node"
-      :class="{'vtl-leaf-node': model.isLeaf, 'vtl-tree-node': !model.isLeaf}"
+      :class="{ 'vtl-leaf-node': model.isLeaf, 'vtl-tree-node': !model.isLeaf }"
     >
       <div
         class="vtl-border vtl-up"
-        :class="{'vtl-active': isDragEnterUp}"
+        :class="{ 'vtl-active': isDragEnterUp }"
         @drop="dropBefore"
         @dragenter="dragEnterUp"
         @dragover="dragOverUp"
@@ -27,34 +27,17 @@
         @mouseout="mouseOut"
         @click.stop="click"
       >
-        <span
-          class="vtl-caret vtl-is-small"
-          v-if="model.children && model.children.length > 0"
-        >
-          <i
-            class="vtl-icon"
-            :class="caretClass"
-            @click.prevent.stop="toggle"
-          ></i>
+        <span class="vtl-caret vtl-is-small" v-if="model.children && model.children.length > 0">
+          <i class="vtl-icon" :class="caretClass" @click.prevent.stop="toggle"></i>
         </span>
 
         <span v-if="model.isLeaf">
-          <slot
-            name="leafNodeIcon"
-            :expanded="expanded"
-            :model="model"
-            :root="rootNode"
-          >
+          <slot name="leafNodeIcon" :expanded="expanded" :model="model" :root="rootNode">
             <i class="vtl-icon vtl-menu-icon vtl-icon-file"></i>
           </slot>
         </span>
         <span v-else>
-          <slot
-            name="treeNodeIcon"
-            :expanded="expanded"
-            :model="model"
-            :root="rootNode"
-          >
+          <slot name="treeNodeIcon" :expanded="expanded" :model="model" :root="rootNode">
             <i class="vtl-icon vtl-menu-icon vtl-icon-folder"></i>
           </slot>
         </span>
@@ -77,12 +60,7 @@
             @click.stop.prevent="addChild(false)"
             v-if="!model.isLeaf && !model.addTreeNodeDisabled"
           >
-            <slot
-              name="addTreeNodeIcon"
-              :expanded="expanded"
-              :model="model"
-              :root="rootNode"
-            >
+            <slot name="addTreeNodeIcon" :expanded="expanded" :model="model" :root="rootNode">
               <i class="vtl-icon vtl-icon-folder-plus-e"></i>
             </slot>
           </span>
@@ -91,40 +69,17 @@
             @click.stop.prevent="addChild(true)"
             v-if="!model.isLeaf && !model.addLeafNodeDisabled"
           >
-            <slot
-              name="addLeafNodeIcon"
-              :expanded="expanded"
-              :model="model"
-              :root="rootNode"
-            >
+            <slot name="addLeafNodeIcon" :expanded="expanded" :model="model" :root="rootNode">
               <i class="vtl-icon vtl-icon-plus"></i>
             </slot>
           </span>
-          <span
-            title="edit"
-            @click.stop.prevent="setEditable"
-            v-if="!model.editNodeDisabled"
-          >
-            <slot
-              name="editNodeIcon"
-              :expanded="expanded"
-              :model="model"
-              :root="rootNode"
-            >
+          <span title="edit" @click.stop.prevent="setEditable" v-if="!model.editNodeDisabled">
+            <slot name="editNodeIcon" :expanded="expanded" :model="model" :root="rootNode">
               <i class="vtl-icon vtl-icon-edit"></i>
             </slot>
           </span>
-          <span
-            title="delete"
-            @click.stop.prevent="delNode"
-            v-if="!model.delNodeDisabled"
-          >
-            <slot
-              name="delNodeIcon"
-              :expanded="expanded"
-              :model="model"
-              :root="rootNode"
-            >
+          <span title="delete" @click.stop.prevent="delNode" v-if="!model.delNodeDisabled">
+            <slot name="delNodeIcon" :expanded="expanded" :model="model" :root="rootNode">
               <i class="vtl-icon vtl-icon-trash"></i>
             </slot>
           </span>
@@ -134,7 +89,7 @@
       <div
         v-if="model.children && model.children.length > 0 && expanded"
         class="vtl-border vtl-bottom"
-        :class="{'vtl-active': isDragEnterBottom}"
+        :class="{ 'vtl-active': isDragEnterBottom }"
         @drop="dropAfter"
         @dragenter="dragEnterBottom"
         @dragover="dragOverBottom"
@@ -143,7 +98,7 @@
     </div>
 
     <div
-      :class="{'vtl-tree-margin': model.name !== 'root'}"
+      :class="{ 'vtl-tree-margin': model.name !== 'root' }"
       v-show="model.name === 'root' || expanded"
       v-if="isFolder"
     >
@@ -179,8 +134,8 @@
 </template>
 
 <script>
-import {TreeNode} from './Tree.js'
-import {addHandler, removeHandler} from './tools.js'
+import { TreeNode } from './Tree.js'
+import { addHandler, removeHandler } from './tools.js'
 
 let compInOperation = null
 
@@ -232,7 +187,7 @@ export default {
 
     treeNodeClass() {
       const {
-        model: {dragDisabled, disabled},
+        model: { dragDisabled, disabled },
         isDragEnterNode
       } = this
 
@@ -309,7 +264,7 @@ export default {
     addChild(isLeaf) {
       const name = isLeaf ? this.defaultLeafNodeName : this.defaultTreeNodeName
       this.expanded = true
-      var node = new TreeNode({name, isLeaf})
+      var node = new TreeNode({ name, isLeaf })
       this.model.addChildren(node, true)
       this.rootNode.$emit('add-node', node)
     },
@@ -332,7 +287,8 @@ export default {
       return true
     },
     dragEnter() {
-      if (compInOperation.model.id === this.model.id || !compInOperation || this.model.isLeaf) return
+      if (compInOperation.model.id === this.model.id || !compInOperation || this.model.isLeaf)
+        return
       this.isDragEnterNode = true
     },
     dragLeave() {

@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import {mount} from '@vue/test-utils'
-import {Tree, VueTreeList} from '@/index'
+import { mount } from '@vue/test-utils'
+import { Tree, VueTreeList } from '@/index'
 
 describe('Slot', () => {
   let wrapper
@@ -27,29 +27,41 @@ describe('Slot', () => {
       }
     ])
     wrapper = mount(VueTreeList, {
-      propsData: {model: new Tree([])},
+      propsData: { model: new Tree([]) },
       scopedSlots: {
         addTreeNodeIcon() {
-          return <span class="add-tree-node-icon">📂</span>
+          return <span class='add-tree-node-icon'>📂</span>
         },
         addLeafNodeIcon() {
-          return <span class="icon">＋</span>
+          return <span class='icon'>＋</span>
         },
         editNodeIcon() {
-          return <span class="icon">📃</span>
+          return <span class='icon'>📃</span>
         },
         delNodeIcon(slotProps) {
-          return (slotProps.model.isLeaf || !slotProps.model.children) ? <span class="del-node-icon">✂️</span> : <span />
+          return slotProps.model.isLeaf || !slotProps.model.children ? (
+            <span class='del-node-icon'>✂️</span>
+          ) : (
+            <span />
+          )
         },
         leafNodeIcon() {
-          return <span class="icon">🍃</span>
+          return <span class='icon'>🍃</span>
         },
         treeNodeIcon(slotProps) {
-          return <span class="tree-node-icon icon">{ slotProps.model.children && slotProps.model.children.length > 0 && !slotProps.expanded ? '🌲' : '❀' }</span>
+          return (
+            <span class='tree-node-icon icon'>
+              {slotProps.model.children &&
+              slotProps.model.children.length > 0 &&
+              !slotProps.expanded
+                ? '🌲'
+                : '❀'}
+            </span>
+          )
         }
       }
     })
-    wrapper.setProps({model: tree})
+    wrapper.setProps({ model: tree })
   })
 
   it('render slot correctly', () => {
