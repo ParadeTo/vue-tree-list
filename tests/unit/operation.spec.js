@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import {mount} from '@vue/test-utils'
-import {Tree, VueTreeList} from '@/index'
+import { mount } from '@vue/test-utils'
+import { Tree, VueTreeList } from '@/index'
 
 describe('Operation', () => {
   let wrapper
@@ -26,8 +26,8 @@ describe('Operation', () => {
         pid: 0
       }
     ])
-    wrapper = mount(VueTreeList, {propsData: {model: new Tree([])}})
-    wrapper.setProps({model: tree})
+    wrapper = mount(VueTreeList, { propsData: { model: new Tree([]) } })
+    wrapper.setProps({ model: tree })
   })
 
   it('delete leaf node', done => {
@@ -75,7 +75,7 @@ describe('Operation', () => {
       const $input = wrapper.find('#t1 .vtl-input')
       $input.element.value = 'New Node 1'
       $input.trigger('input')
-      var event = new KeyboardEvent('keyup', {keyCode: 13})
+      var event = new KeyboardEvent('keyup', { keyCode: 13 })
       window.dispatchEvent(event)
       Vue.nextTick(() => {
         expect(wrapper.find('#t1').text()).toBe('New Node 1')

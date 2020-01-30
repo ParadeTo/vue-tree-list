@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import {mount} from '@vue/test-utils'
-import {Tree, VueTreeList} from '@/index'
+import { mount } from '@vue/test-utils'
+import { Tree, VueTreeList } from '@/index'
 
 describe('Drag', () => {
   let wrapper
@@ -36,14 +36,14 @@ describe('Drag', () => {
         pid: 0
       }
     ])
-    wrapper = mount(VueTreeList, {propsData: {model: new Tree([])}})
-    wrapper.setProps({model: tree})
+    wrapper = mount(VueTreeList, { propsData: { model: new Tree([]) } })
+    wrapper.setProps({ model: tree })
   })
 
   it('drag before', done => {
     const $tree2 = wrapper.find('#t2 .vtl-node-main')
     const $tree1Up = wrapper.find('#t1 .vtl-up')
-    $tree2.trigger('dragstart', { dataTransfer: { setData: () => {} }})
+    $tree2.trigger('dragstart', { dataTransfer: { setData: () => {} } })
     $tree1Up.trigger('drop')
     Vue.nextTick(() => {
       expect(wrapper.find('.vtl-node').attributes('id')).toBe('t2')
@@ -54,10 +54,15 @@ describe('Drag', () => {
   it('drag after', done => {
     const $tree3 = wrapper.find('#t3 .vtl-node-main')
     const $tree1Bottom = wrapper.find('#t1 .vtl-bottom')
-    $tree3.trigger('dragstart', { dataTransfer: { setData: () => {} }})
+    $tree3.trigger('dragstart', { dataTransfer: { setData: () => {} } })
     $tree1Bottom.trigger('drop')
     Vue.nextTick(() => {
-      expect(wrapper.findAll('.vtl-tree-node').at(2).attributes('id')).toBe('t3')
+      expect(
+        wrapper
+          .findAll('.vtl-tree-node')
+          .at(2)
+          .attributes('id')
+      ).toBe('t3')
       done()
     })
   })
@@ -65,7 +70,7 @@ describe('Drag', () => {
   it('drag into', done => {
     const $tree3 = wrapper.find('#t3 .vtl-node-main')
     const $tree1 = wrapper.find('#t1 .vtl-node-main')
-    $tree3.trigger('dragstart', { dataTransfer: { setData: () => {} }})
+    $tree3.trigger('dragstart', { dataTransfer: { setData: () => {} } })
     $tree1.trigger('drop')
     Vue.nextTick(() => {
       expect(wrapper.find('#t1 + .vtl-tree-margin .vtl-node').attributes('id')).toBe('t3')
@@ -77,7 +82,7 @@ describe('Drag', () => {
     const snapshot = wrapper.html()
     const $tree1 = wrapper.find('#t1 .vtl-node-main')
     const $tree1Child = wrapper.find('#t12 .vtl-node-main')
-    $tree1.trigger('dragstart', { dataTransfer: { setData: () => {} }})
+    $tree1.trigger('dragstart', { dataTransfer: { setData: () => {} } })
     $tree1Child.trigger('drop')
     Vue.nextTick(() => {
       expect(wrapper.html()).toBe(snapshot)
