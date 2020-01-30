@@ -332,8 +332,7 @@ export default {
       return true
     },
     dragEnter() {
-      if (!compInOperation) return
-      if (this.model.isLeaf) return
+      if (compInOperation.model.id === this.model.id || !compInOperation || this.model.isLeaf) return
       this.isDragEnterNode = true
     },
     dragLeave() {
