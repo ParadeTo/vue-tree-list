@@ -38,7 +38,7 @@
     "vue-template-compiler": "^2.6.10"
   },
   "lint-staged": {
-    "**/**.{js,json,pcss,md,vue}": [
+    "**/*.{js,json,md,vue}": [
       "prettier --write"
     ]
   },
