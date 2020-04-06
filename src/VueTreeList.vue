@@ -246,7 +246,7 @@ export default {
         id: this.model.id,
         oldName: oldName,
         newName: e.target.value,
-        eventType: "blur"
+        eventType: 'blur'
       })
     },
 
