@@ -221,7 +221,8 @@ export default {
       this.rootNode.$emit('change-name', {
         id: this.model.id,
         oldName: oldName,
-        newName: e.target.value
+        newName: e.target.value,
+        node: this.model
       })
     },
 
@@ -295,6 +296,7 @@ export default {
       return true
     },
     dragEnter() {
+      if (!compInOperation) return
       if (compInOperation.model.id === this.model.id || !compInOperation || this.model.isLeaf)
         return
       this.isDragEnterNode = true
