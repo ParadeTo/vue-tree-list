@@ -14,6 +14,11 @@
       default-leaf-node-name="new leaf"
       v-bind:default-expanded="false"
     >
+      <template v-slot:leafNameDisplay="slotProps">
+        <span>
+          {{ slotProps.model.name }} <span class="muted">#{{ slotProps.model.id }}</span>
+        </span>
+      </template>
       <template v-slot:addTreeNodeIcon="slotProps">
         <span class="icon">📂</span>
       </template>
@@ -41,9 +46,8 @@
     </vue-tree-list>
     <button @click="getNewTree">Get new tree</button>
     <pre>
-          {{ newTree }}
-        </pre
-    >
+      {{ newTree }}
+    </pre>
   </div>
 </template>
 <script>
@@ -175,5 +179,10 @@ export default {
   &:hover {
     cursor: pointer;
   }
+}
+
+.muted {
+  color: gray;
+  font-size: 80%;
 }
 </style>

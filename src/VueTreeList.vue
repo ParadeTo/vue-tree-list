@@ -43,7 +43,9 @@
         </span>
 
         <div class="vtl-node-content" v-if="!editable">
-          {{ model.name }}
+          <slot name="leafNameDisplay" :expanded="expanded" :model="model" :root="rootNode">
+            {{ model.name }}
+          </slot>
         </div>
         <input
           v-else
@@ -110,6 +112,9 @@
         :model="model"
         :key="model.id"
       >
+        <template v-slot:leafNameDisplay="slotProps">
+          <slot name="leafNameDisplay" v-bind="slotProps" />
+        </template>
         <template v-slot:addTreeNodeIcon="slotProps">
           <slot name="addTreeNodeIcon" v-bind="slotProps" />
         </template>
