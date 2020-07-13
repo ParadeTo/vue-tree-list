@@ -87,7 +87,7 @@
           </span>
           <span v-if="!model.disabled">
             <slot name="additionalNodeIcons" :expanded="expanded" :model="model" :root="rootNode">
-              <i class="vtl-icon">-</i>
+              <i class="vtl-icon"></i>
             </slot>
           </span>
         </div>
