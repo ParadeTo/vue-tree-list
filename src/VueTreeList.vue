@@ -85,6 +85,11 @@
               <i class="vtl-icon vtl-icon-trash"></i>
             </slot>
           </span>
+          <span v-if="!model.disabled">
+            <slot name="additionalNodeIcons" :expanded="expanded" :model="model" :root="rootNode">
+              <i class="vtl-icon">-</i>
+            </slot>
+          </span>
         </div>
       </div>
 
@@ -132,6 +137,9 @@
         </template>
         <template v-slot:treeNodeIcon="slotProps">
           <slot name="treeNodeIcon" v-bind="slotProps" />
+        </template>
+        <template v-slot:additionalNodeIcons="slotProps">
+          <slot name="additionalNodeIcons" v-bind="slotProps" />
         </template>
       </item>
     </div>
