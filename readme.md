@@ -219,7 +219,7 @@ Or just register locally like the example below.
 
 |    name     |            params            |                                                                           description                                                                           |
 | :---------: | :--------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|    click    |           TreeNode           |                                                                Trigger when clicking a tree node                                                                |
+|    click    |           TreeNode           |                                Trigger when clicking a tree node. You can call `toggle` of `TreeNode` to toggle the folder node.                                |
 | change-name | {'id', 'oldName', 'newName'} |                                                              Trigger after changing a node's name                                                               |
 | delete-node |           TreeNode           |                                 Trigger when clicking `delNode` button. You can call `remove` of `TreeNode` to remove the node.                                 |
 |  add-node   |           TreeNode           |                                                                 Trigger after adding a new node                                                                 |

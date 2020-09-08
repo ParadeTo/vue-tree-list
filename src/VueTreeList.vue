@@ -272,7 +272,10 @@ export default {
     },
 
     click() {
-      this.rootNode.$emit('click', this.model)
+      this.rootNode.$emit('click', {
+        toggle: this.toggle,
+        ...this.model
+      })
     },
 
     addChild(isLeaf) {
