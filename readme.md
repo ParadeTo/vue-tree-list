@@ -182,12 +182,13 @@ Or just register locally like the example below.
 
 ## props of vue-tree-list
 
-|          name          |   type   |    default    |                                         description                                         |
-| :--------------------: | :------: | :-----------: | :-----------------------------------------------------------------------------------------: |
-|         model          | TreeNode |       -       | You can use `const head = new Tree([])` to generate a tree with the head of `TreeNode` type |
-| default-tree-node-name |  string  | New node node |                                Default name for new treenode                                |
-| default-leaf-node-name |  string  | New leaf node |                                Default name for new leafnode                                |
-|    default-expanded    | boolean  |     true      |                                   Tree is expanded or not                                   |
+|           name            |   type   |    default    |                                         description                                         |
+| :-----------------------: | :------: | :-----------: | :-----------------------------------------------------------------------------------------: |
+|           model           | TreeNode |       -       | You can use `const head = new Tree([])` to generate a tree with the head of `TreeNode` type |
+|  default-tree-node-name   |  string  | New node node |                                Default name for new treenode                                |
+|  default-leaf-node-name   |  string  | New leaf node |                                Default name for new leafnode                                |
+|     default-expanded      | boolean  |     true      |                                   Tree is expanded or not                                   |
+| default-node-active-class |  string  |    active     |                            CSS Class added to the selected node                             |
 
 ## props of TreeNode
 

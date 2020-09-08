@@ -153,7 +153,8 @@ export default {
       isDragEnterUp: false,
       isDragEnterBottom: false,
       isDragEnterNode: false,
-      expanded: this.defaultExpanded
+      expanded: this.defaultExpanded,
+      selectedId: null
     }
   },
   props: {
@@ -171,6 +172,10 @@ export default {
     defaultExpanded: {
       type: Boolean,
       default: true
+    },
+    defaultNodeActiveClass: {
+      type: String,
+      default: 'active'
     }
   },
   computed: {
@@ -192,7 +197,7 @@ export default {
 
     treeNodeClass() {
       const {
-        model: { dragDisabled, disabled },
+        model: { dragDisabled, disabled, id },
         isDragEnterNode
       } = this
 
@@ -200,7 +205,8 @@ export default {
         'vtl-node-main': true,
         'vtl-active': isDragEnterNode,
         'vtl-drag-disabled': dragDisabled,
-        'vtl-disabled': disabled
+        'vtl-disabled': disabled,
+        [this.defaultNodeActiveClass]: this.selectedId === id
       }
     }
   },
@@ -272,6 +278,7 @@ export default {
     },
 
     click() {
+      this.selectedId = this.model.id
       this.rootNode.$emit('click', this.model)
     },
 
