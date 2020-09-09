@@ -4,7 +4,11 @@
       v-if="model.name !== 'root'"
       :id="model.id"
       class="vtl-node"
-      :class="{ 'vtl-leaf-node': model.isLeaf, 'vtl-tree-node': !model.isLeaf }"
+      :class="{
+        'vtl-leaf-node': model.isLeaf,
+        'vtl-tree-node': !model.isLeaf,
+        [defaultNodeActiveClass]: rootNode.selectedId === model.id
+      }"
     >
       <div
         class="vtl-border vtl-up"
@@ -153,7 +157,8 @@ export default {
       isDragEnterUp: false,
       isDragEnterBottom: false,
       isDragEnterNode: false,
-      expanded: this.defaultExpanded
+      expanded: this.defaultExpanded,
+      selectedId: null
     }
   },
   props: {
@@ -171,6 +176,10 @@ export default {
     defaultExpanded: {
       type: Boolean,
       default: true
+    },
+    defaultNodeActiveClass: {
+      type: String,
+      default: 'active'
     }
   },
   computed: {
@@ -192,7 +201,7 @@ export default {
 
     treeNodeClass() {
       const {
-        model: { dragDisabled, disabled },
+        model: { dragDisabled, disabled, id },
         isDragEnterNode
       } = this
 
@@ -200,7 +209,8 @@ export default {
         'vtl-node-main': true,
         'vtl-active': isDragEnterNode,
         'vtl-drag-disabled': dragDisabled,
-        'vtl-disabled': disabled
+        'vtl-disabled': disabled,
+        [this.defaultNodeActiveClass]: this.rootNode.selectedId === id
       }
     }
   },
@@ -272,6 +282,7 @@ export default {
     },
 
     click() {
+      this.rootNode.selectedId = this.model.id
       this.rootNode.$emit('click', this.model)
     },
 
