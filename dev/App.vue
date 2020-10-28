@@ -43,6 +43,9 @@
           }}</span
         >
       </template>
+      <template v-slot:additionalIcons="slotProps">
+        <span class="icon"> </span>
+      </template>
     </vue-tree-list>
     <button @click="getNewTree">Get new tree</button>
     <pre>

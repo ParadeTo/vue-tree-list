@@ -50,6 +50,7 @@ Or just register locally like the example below.
       <span class="icon" slot="delNodeIcon">✂️</span>
       <span class="icon" slot="leafNodeIcon">🍃</span>
       <span class="icon" slot="treeNodeIcon">🌲</span>
+      <span class="icon" slot="additionalNodeIcons">-</span>
     </vue-tree-list>
     <button @click="getNewTree">Get new tree</button>
     <pre>
