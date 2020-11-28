@@ -58,7 +58,7 @@
         />
         <div class="vtl-operation" v-show="isHover">
           <span
-            title="add tree node"
+            :title="defaultAddTreeNodeTitle"
             @click.stop.prevent="addChild(false)"
             v-if="!model.isLeaf && !model.addTreeNodeDisabled"
           >
@@ -67,7 +67,7 @@
             </slot>
           </span>
           <span
-            title="add leaf node"
+            :title="defaultAddLeafNodeTitle"
             @click.stop.prevent="addChild(true)"
             v-if="!model.isLeaf && !model.addLeafNodeDisabled"
           >
@@ -162,11 +162,19 @@ export default {
     },
     defaultLeafNodeName: {
       type: String,
-      default: 'New leaf node'
+      default: 'Leaf Node'
     },
     defaultTreeNodeName: {
       type: String,
-      default: 'New tree node'
+      default: 'Tree Node'
+    },
+    defaultAddTreeNodeTitle: {
+      type: String,
+      default: 'Add Tree Node'
+    },
+    defaultAddLeafNodeTitle: {
+      type: String,
+      default: 'Add Leaf Node'
     },
     defaultExpanded: {
       type: Boolean,

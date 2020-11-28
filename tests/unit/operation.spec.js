@@ -51,7 +51,7 @@ describe('Operation', () => {
   })
 
   it('add leaf node', done => {
-    const $node1AddLeafNode = wrapper.find('#t1 [title="add leaf node"]')
+    const $node1AddLeafNode = wrapper.find('#t1 [title="Add Leaf Node"]')
     $node1AddLeafNode.trigger('click')
     Vue.nextTick(() => {
       expect(wrapper.findAll('.vtl-leaf-node').length).toBe(2)
@@ -60,7 +60,7 @@ describe('Operation', () => {
   })
 
   it('add tree node', done => {
-    const $node1AddTreeNode = wrapper.find('#t1 [title="add tree node"]')
+    const $node1AddTreeNode = wrapper.find('#t1 [title="Add Tree Node"]')
     $node1AddTreeNode.trigger('click')
     Vue.nextTick(() => {
       expect(wrapper.findAll('.vtl-tree-node').length).toBe(3)

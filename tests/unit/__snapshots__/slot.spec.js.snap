@@ -11,7 +11,7 @@ exports[`Slot render slot correctly 1`] = `
           <div class="vtl-node-content">
             Node 1
           </div>
-          <div class="vtl-operation" style="display: none;"><span title="add tree node"><span class="add-tree-node-icon">📂</span></span> <span title="add leaf node"><span class="icon">＋</span></span> <span title="edit"><span class="icon">📃</span></span> <span title="delete"><span></span></span></div>
+          <div class="vtl-operation" style="display: none;"><span title="Add Tree Node"><span class="add-tree-node-icon">📂</span></span> <span title="Add Leaf Node"><span class="icon">＋</span></span> <span title="edit"><span class="icon">📃</span></span> <span title="delete"><span></span></span></div>
         </div>
         <div class="vtl-border vtl-bottom"></div>
       </div>
@@ -42,7 +42,7 @@ exports[`Slot render slot correctly 1`] = `
           <div class="vtl-node-content">
             Node 2
           </div>
-          <div class="vtl-operation" style="display: none;"><span title="add tree node"><span class="add-tree-node-icon">📂</span></span> <span title="add leaf node"><span class="icon">＋</span></span> <span title="edit"><span class="icon">📃</span></span> <span title="delete"><span class="del-node-icon">✂️</span></span></div>
+          <div class="vtl-operation" style="display: none;"><span title="Add Tree Node"><span class="add-tree-node-icon">📂</span></span> <span title="Add Leaf Node"><span class="icon">＋</span></span> <span title="edit"><span class="icon">📃</span></span> <span title="delete"><span class="del-node-icon">✂️</span></span></div>
         </div>
         <!---->
       </div>
