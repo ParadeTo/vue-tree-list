@@ -85,6 +85,11 @@
               <i class="vtl-icon vtl-icon-trash"></i>
             </slot>
           </span>
+          <span title="click" @click.stop.prevent="clickNode" v-if="!model.clickNodeDisabled">
+            <slot name="clickNodeIcon" :expanded="expanded" :model="model" :root="rootNode">
+              <i class="vtl-icon vtl-icon-trash"></i>
+            </slot>
+          </span>
         </div>
       </div>
 
@@ -123,6 +128,9 @@
         </template>
         <template v-slot:editNodeIcon="slotProps">
           <slot name="editNodeIcon" v-bind="slotProps" />
+        </template>
+        <template v-slot:clickNodeIcon="slotProps">
+          <slot name="clickNodeIcon" v-bind="slotProps" />
         </template>
         <template v-slot:delNodeIcon="slotProps">
           <slot name="delNodeIcon" v-bind="slotProps" />
@@ -241,6 +249,10 @@ export default {
 
     delNode() {
       this.rootNode.$emit('delete-node', this.model)
+    },
+
+    clickNode() {
+      this.rootNode.$emit('click-node', this.model)
     },
 
     setEditable() {
