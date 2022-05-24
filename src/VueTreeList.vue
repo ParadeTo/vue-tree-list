@@ -75,6 +75,11 @@
               <i class="vtl-icon vtl-icon-plus"></i>
             </slot>
           </span>
+          <span title="click" @click.stop.prevent="clickNode" v-if="!model.clickNodeDisabled">
+            <slot name="clickNodeIcon" :expanded="expanded" :model="model" :root="rootNode">
+              <i class="vtl-icon"></i>
+            </slot>
+          </span>
           <span title="edit" @click.stop.prevent="setEditable" v-if="!model.editNodeDisabled">
             <slot name="editNodeIcon" :expanded="expanded" :model="model" :root="rootNode">
               <i class="vtl-icon vtl-icon-edit"></i>
@@ -82,11 +87,6 @@
           </span>
           <span title="delete" @click.stop.prevent="delNode" v-if="!model.delNodeDisabled">
             <slot name="delNodeIcon" :expanded="expanded" :model="model" :root="rootNode">
-              <i class="vtl-icon vtl-icon-trash"></i>
-            </slot>
-          </span>
-          <span title="click" @click.stop.prevent="clickNode" v-if="!model.clickNodeDisabled">
-            <slot name="clickNodeIcon" :expanded="expanded" :model="model" :root="rootNode">
               <i class="vtl-icon vtl-icon-trash"></i>
             </slot>
           </span>
