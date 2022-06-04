@@ -7,41 +7,40 @@
     "serve": "vue-cli-service serve dev",
     "build": "vue-cli-service build --target lib src/index.js",
     "test:unit": "vue-cli-service test:unit --watch",
-    "test:coverage": "vue-cli-service test:unit --coverage",
     "lint": "vue-cli-service lint",
-    "lint-staged": "lint-staged",
     "commit": "git-cz",
-    "prepublish": "npm run build"
+    "lint-staged": "lint-staged",
+    "prepublish": "npm run build",
+    "test:coverage": "vue-cli-service test:unit --coverage"
   },
   "main": "dist/vue-tree-list.umd.min.js",
   "dependencies": {},
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.1.0",
-    "@vue/cli-plugin-eslint": "^4.1.0",
-    "@vue/cli-plugin-unit-jest": "^4.1.1",
-    "@vue/cli-service": "^4.1.0",
+    "@babel/core": "^7.12.16",
+    "@babel/eslint-parser": "^7.12.16",
+    "@vue/cli-plugin-babel": "^5.0.4",
+    "@vue/cli-plugin-eslint": "^5.0.4",
+    "@vue/cli-plugin-unit-jest": "^5.0.4",
+    "@vue/cli-service": "^5.0.4",
+    "@vue/compat": "^3.1.0",
     "@vue/test-utils": "1.0.0-beta.29",
-    "babel-eslint": "^10.0.3",
+    "@vue/vue3-jest": "^27.0.0-alpha.3",
     "core-js": "^3.4.3",
-    "eslint": "^5.16.0",
+    "eslint": "^7.32.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-prettier": "^3.1.2",
-    "eslint-plugin-vue": "^5.0.0",
+    "eslint-plugin-vue": "^8.0.3",
     "git-cz": "^4.7.4",
     "husky": "^4.2.1",
+    "jest": "^27.1.0",
     "jest-serializer-vue": "^2.0.2",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
     "lint-staged": "^10.0.4",
     "prettier": "^1.19.1",
     "prettier-eslint-cli": "^5.0.0",
-    "vue": "^2.6.10",
+    "vue": "^3.1.0",
     "vue-template-compiler": "^2.6.10"
-  },
-  "lint-staged": {
-    "**/*.{js,json,md,vue}": [
-      "prettier --write"
-    ]
   },
   "browserslist": [
     "> 1%",
@@ -56,6 +55,11 @@
     "tree"
   ],
   "license": "ISC",
+  "lint-staged": {
+    "**/*.{js,json,md,vue}": [
+      "prettier --write"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ParadeTo/vue-tree-list.git"

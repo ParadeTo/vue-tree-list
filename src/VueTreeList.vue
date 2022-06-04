@@ -104,7 +104,7 @@
       v-show="model.name === 'root' || expanded"
       v-if="isFolder"
     >
-      <item
+      <VueTreeList
         v-for="model in model.children"
         :default-tree-node-name="defaultTreeNodeName"
         :default-leaf-node-name="defaultLeafNodeName"
@@ -133,7 +133,7 @@
         <template v-slot:treeNodeIcon="slotProps">
           <slot name="treeNodeIcon" v-bind="slotProps" />
         </template>
-      </item>
+      </VueTreeList>
     </div>
   </div>
 </template>
@@ -142,6 +142,7 @@
 import { TreeNode } from './Tree.js'
 import { addHandler, removeHandler } from './tools.js'
 
+// eslint-disable-next-line
 let compInOperation = null
 
 export default {
@@ -184,7 +185,7 @@ export default {
   computed: {
     rootNode() {
       var node = this.$parent
-      while (node._props.model.name !== 'root') {
+      while (node.$props.model.name !== 'root') {
         node = node.$parent
       }
       return node
@@ -213,7 +214,7 @@ export default {
     }
   },
   beforeCreate() {
-    this.$options.components.item = require('./VueTreeList').default
+    console.log(this.$options)
   },
   mounted() {
     const vm = this
@@ -303,81 +304,6 @@ export default {
         return true
       }
       return false
-    },
-    dragEnd() {
-      compInOperation = null
-    },
-    dragOver(e) {
-      e.preventDefault()
-      return true
-    },
-    dragEnter() {
-      if (!compInOperation) return
-      if (compInOperation.model.id === this.model.id || !compInOperation || this.model.isLeaf)
-        return
-      this.isDragEnterNode = true
-    },
-    dragLeave() {
-      this.isDragEnterNode = false
-    },
-    drop() {
-      if (!compInOperation) return
-      const oldParent = compInOperation.model.parent
-      compInOperation.model.moveInto(this.model)
-      this.isDragEnterNode = false
-      this.rootNode.$emit('drop', {
-        target: this.model,
-        node: compInOperation.model,
-        src: oldParent
-      })
-    },
-
-    dragEnterUp() {
-      if (!compInOperation) return
-      this.isDragEnterUp = true
-    },
-    dragOverUp(e) {
-      e.preventDefault()
-      return true
-    },
-    dragLeaveUp() {
-      if (!compInOperation) return
-      this.isDragEnterUp = false
-    },
-    dropBefore() {
-      if (!compInOperation) return
-      const oldParent = compInOperation.model.parent
-      compInOperation.model.insertBefore(this.model)
-      this.isDragEnterUp = false
-      this.rootNode.$emit('drop-before', {
-        target: this.model,
-        node: compInOperation.model,
-        src: oldParent
-      })
-    },
-
-    dragEnterBottom() {
-      if (!compInOperation) return
-      this.isDragEnterBottom = true
-    },
-    dragOverBottom(e) {
-      e.preventDefault()
-      return true
-    },
-    dragLeaveBottom() {
-      if (!compInOperation) return
-      this.isDragEnterBottom = false
-    },
-    dropAfter() {
-      if (!compInOperation) return
-      const oldParent = compInOperation.model.parent
-      compInOperation.model.insertAfter(this.model)
-      this.isDragEnterBottom = false
-      this.rootNode.$emit('drop-after', {
-        target: this.model,
-        node: compInOperation.model,
-        src: oldParent
-      })
     }
   }
 }

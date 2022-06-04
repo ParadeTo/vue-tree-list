@@ -19,19 +19,19 @@
           {{ slotProps.model.name }} <span class="muted">#{{ slotProps.model.id }}</span>
         </span>
       </template>
-      <template v-slot:addTreeNodeIcon="slotProps">
+      <template v-slot:addTreeNodeIcon>
         <span class="icon">📂</span>
       </template>
-      <template v-slot:addLeafNodeIcon="slotProps">
+      <template v-slot:addLeafNodeIcon>
         <span class="icon">＋</span>
       </template>
-      <template v-slot:editNodeIcon="slotProps">
+      <template v-slot:editNodeIcon>
         <span class="icon">📃</span>
       </template>
-      <template v-slot:delNodeIcon="slotProps">
+      <template v-slot:delNodeIcon>
         <span class="icon">✂️</span>
       </template>
-      <template v-slot:leafNodeIcon="slotProps">
+      <template v-slot:leafNodeIcon>
         <span class="icon">🍃</span>
       </template>
       <template v-slot:treeNodeIcon="slotProps">
@@ -51,6 +51,7 @@
   </div>
 </template>
 <script>
+/* eslint-disable */
 import { VueTreeList, Tree, TreeNode } from '../src'
 export default {
   components: {
