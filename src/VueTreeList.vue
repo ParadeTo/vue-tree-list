@@ -213,9 +213,6 @@ export default {
       }
     }
   },
-  beforeCreate() {
-    console.log(this.$options)
-  },
   mounted() {
     const vm = this
     addHandler(window, 'keyup', function(e) {
