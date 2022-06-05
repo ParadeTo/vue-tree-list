@@ -22,7 +22,7 @@
     "@vue/cli-plugin-eslint": "^5.0.4",
     "@vue/cli-plugin-unit-jest": "^5.0.4",
     "@vue/cli-service": "^5.0.4",
-    "@vue/compat": "^3.1.0",
+    "@vue/compat": "3.2.36",
     "@vue/test-utils": "1.0.0-beta.29",
     "@vue/vue3-jest": "^27.0.0-alpha.3",
     "core-js": "^3.4.3",
@@ -39,7 +39,7 @@
     "lint-staged": "^10.0.4",
     "prettier": "^1.19.1",
     "prettier-eslint-cli": "^5.0.0",
-    "vue": "^3.1.0",
+    "vue": "3.2.36",
     "vue-template-compiler": "^2.6.10"
   },
   "browserslist": [
