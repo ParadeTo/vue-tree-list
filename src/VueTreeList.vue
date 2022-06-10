@@ -23,10 +23,10 @@
         @dragleave="dragLeave"
         @drop="drop"
         @dragend="dragEnd"
-        @mouseover="mouseOver"
-        @mouseout="mouseOut"
         @click.stop="click"
       >
+        <!-- @mouseout="mouseOut" -->
+        <!-- @mouseover="mouseOver" -->
         <span class="vtl-caret vtl-is-small" v-if="model.children && model.children.length > 0">
           <i class="vtl-icon" :class="caretClass" @click.prevent.stop="toggle"></i>
         </span>
@@ -53,10 +53,10 @@
           type="text"
           ref="nodeInput"
           :value="model.name"
-          @input="updateName"
-          @blur="setUnEditable"
+          @change="updateName"
         />
-        <div class="vtl-operation" v-show="isHover">
+        <!-- @blur="setUnEditable"  v-if="isHover" -->
+        <div class="vtl-operation">
           <span
             :title="defaultAddTreeNodeTitle"
             @click.stop.prevent="addChild(false)"
@@ -245,6 +245,7 @@ export default {
         newName: e.target.value,
         node: this.model
       })
+      this.editable = false
     },
 
     delNode() {
@@ -257,11 +258,11 @@ export default {
 
     setEditable() {
       this.editable = true
-      this.$nextTick(() => {
-        const $input = this.$refs.nodeInput
-        $input.focus()
-        $input.setSelectionRange(0, $input.value.length)
-      })
+      // this.$nextTick(() => {
+      // const $input = this.$refs.nodeInput
+      // $input.focus()
+      // $input.setSelectionRange(0, $input.value.length)
+      // })
     },
 
     setUnEditable(e) {
@@ -480,8 +481,14 @@ export default {
     max-width: 150px;
     border-bottom: 1px solid blue;
   }
+  .vtl-operation {
+    display: none;
+  }
   &:hover {
     background-color: #f0f0f0;
+    .vtl-operation {
+      display: block;
+    }
   }
   &.vtl-active {
     outline: 2px dashed pink;
