@@ -50,10 +50,11 @@
     </pre>
   </div>
 </template>
-<script>
-/* eslint-disable */
+<script lang="ts">
+import { defineComponent } from 'vue'
 import { VueTreeList, Tree, TreeNode } from '../src'
-export default {
+
+export default defineComponent({
   components: {
     VueTreeList
   },
@@ -159,7 +160,7 @@ export default {
       vm.newTree = _dfs(vm.data)
     }
   }
-}
+})
 </script>
 <style lang="less" rel="stylesheet/less">
 .vtl {

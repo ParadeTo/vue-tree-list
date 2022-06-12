@@ -105,12 +105,12 @@
       v-if="isFolder"
     >
       <VueTreeList
-        v-for="model in model.children"
+        v-for="m in model.children"
         :default-tree-node-name="defaultTreeNodeName"
         :default-leaf-node-name="defaultLeafNodeName"
         :default-expanded="defaultExpanded"
-        :model="model"
-        :key="model.id"
+        :model="m"
+        :key="m.id"
       >
         <template v-slot:leafNameDisplay="slotProps">
           <slot name="leafNameDisplay" v-bind="slotProps" />
@@ -138,14 +138,16 @@
   </div>
 </template>
 
-<script>
-import { TreeNode } from './Tree.js'
-import { addHandler, removeHandler } from './tools.js'
+<script lang="ts">
+import { defineComponent } from 'vue'
 
-// eslint-disable-next-line
-let compInOperation = null
+import { TreeNode } from './Tree'
 
-export default {
+let compInOperation: InstanceType<typeof Comp> | null = null
+// eslint-disable-next-line no-unused-vars
+let blurHandler: (e: KeyboardEvent) => void
+
+const Comp = defineComponent({
   name: 'vue-tree-list',
   data: function() {
     return {
@@ -159,6 +161,7 @@ export default {
   },
   props: {
     model: {
+      required: true,
       type: Object
     },
     defaultLeafNodeName: {
@@ -185,7 +188,9 @@ export default {
   computed: {
     rootNode() {
       var node = this.$parent
-      while (node.$props.model.name !== 'root') {
+      // @ts-ignore
+      while (node?.$props.model.name !== 'root') {
+        // @ts-ignore
         node = node.$parent
       }
       return node
@@ -195,11 +200,11 @@ export default {
       return this.expanded ? 'vtl-icon-caret-down' : 'vtl-icon-caret-right'
     },
 
-    isFolder() {
+    isFolder(): boolean {
       return this.model.children && this.model.children.length
     },
 
-    treeNodeClass() {
+    treeNodeClass(): { [key: string]: boolean } {
       const {
         model: { dragDisabled, disabled },
         isDragEnterNode
@@ -215,24 +220,25 @@ export default {
   },
   mounted() {
     const vm = this
-    addHandler(window, 'keyup', function(e) {
+    blurHandler = function(e: KeyboardEvent) {
       // click enter
       if (e.keyCode === 13 && vm.editable) {
         vm.editable = false
       }
-    })
+    }
+    window.addEventListener('keyup', blurHandler)
   },
   beforeDestroy() {
-    removeHandler(window, 'keyup')
+    window.removeEventListener('keyup', blurHandler)
   },
   methods: {
-    updateName(e) {
+    updateName(e: Event) {
       var oldName = this.model.name
-      this.model.changeName(e.target.value)
+      this.model.changeName((e.target as HTMLInputElement).value)
       this.rootNode.$emit('change-name', {
         id: this.model.id,
         oldName: oldName,
-        newName: e.target.value,
+        newName: (e.target as HTMLInputElement).value,
         node: this.model
       })
     },
@@ -244,20 +250,20 @@ export default {
     setEditable() {
       this.editable = true
       this.$nextTick(() => {
-        const $input = this.$refs.nodeInput
+        const $input = this.$refs.nodeInput as HTMLInputElement
         $input.focus()
         $input.setSelectionRange(0, $input.value.length)
       })
     },
 
-    setUnEditable(e) {
+    setUnEditable(e: FocusEvent) {
       this.editable = false
       var oldName = this.model.name
-      this.model.changeName(e.target.value)
+      this.model.changeName((e.target as HTMLInputElement).value)
       this.rootNode.$emit('change-name', {
         id: this.model.id,
         oldName: oldName,
-        newName: e.target.value,
+        newName: (e.target as HTMLInputElement).value,
         eventType: 'blur'
       })
     },
@@ -284,7 +290,7 @@ export default {
       })
     },
 
-    addChild(isLeaf) {
+    addChild(isLeaf: boolean) {
       const name = isLeaf ? this.defaultLeafNodeName : this.defaultTreeNodeName
       this.expanded = true
       var node = new TreeNode({ name, isLeaf })
@@ -292,18 +298,96 @@ export default {
       this.rootNode.$emit('add-node', node)
     },
 
-    dragStart(e) {
+    dragStart(e: DragEvent) {
       if (!(this.model.dragDisabled || this.model.disabled)) {
         compInOperation = this
         // for firefox
-        e.dataTransfer.setData('data', 'data')
-        e.dataTransfer.effectAllowed = 'move'
+        if (e.dataTransfer) {
+          e.dataTransfer.setData('data', 'data')
+          e.dataTransfer.effectAllowed = 'move'
+        }
         return true
       }
       return false
+    },
+    dragEnd() {
+      compInOperation = null
+    },
+    dragOver(e: DragEvent) {
+      e.preventDefault()
+      return true
+    },
+    dragEnter() {
+      if (!compInOperation) return
+      if (compInOperation.model.id === this.model.id || !compInOperation || this.model.isLeaf)
+        return
+      this.isDragEnterNode = true
+    },
+    dragLeave() {
+      this.isDragEnterNode = false
+    },
+    drop() {
+      if (!compInOperation) return
+      const oldParent = compInOperation.model.parent
+      compInOperation.model.moveInto(this.model)
+      this.isDragEnterNode = false
+      this.rootNode.$emit('drop', {
+        target: this.model,
+        node: compInOperation.model,
+        src: oldParent
+      })
+    },
+
+    dragEnterUp() {
+      if (!compInOperation) return
+      this.isDragEnterUp = true
+    },
+    dragOverUp(e: DragEvent) {
+      e.preventDefault()
+      return true
+    },
+    dragLeaveUp() {
+      if (!compInOperation) return
+      this.isDragEnterUp = false
+    },
+    dropBefore() {
+      if (!compInOperation) return
+      const oldParent = compInOperation.model.parent
+      compInOperation.model.insertBefore(this.model)
+      this.isDragEnterUp = false
+      this.rootNode.$emit('drop-before', {
+        target: this.model,
+        node: compInOperation.model,
+        src: oldParent
+      })
+    },
+
+    dragEnterBottom() {
+      if (!compInOperation) return
+      this.isDragEnterBottom = true
+    },
+    dragOverBottom(e: DragEvent) {
+      e.preventDefault()
+      return true
+    },
+    dragLeaveBottom() {
+      if (!compInOperation) return
+      this.isDragEnterBottom = false
+    },
+    dropAfter() {
+      if (!compInOperation) return
+      const oldParent = compInOperation.model.parent
+      compInOperation.model.insertAfter(this.model)
+      this.isDragEnterBottom = false
+      this.rootNode.$emit('drop-after', {
+        target: this.model,
+        node: compInOperation.model,
+        src: oldParent
+      })
     }
   }
-}
+})
+export default Comp
 </script>
 
 <style lang="less" rel="stylesheet/less">
