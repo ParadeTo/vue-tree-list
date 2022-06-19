@@ -28,7 +28,7 @@
     "@vue/cli-service": "^5.0.4",
     "@vue/compat": "3.2.36",
     "@vue/eslint-config-typescript": "^9.1.0",
-    "@vue/test-utils": "1.0.0-beta.29",
+    "@vue/test-utils": "^2.0.0-rc.18",
     "@vue/vue3-jest": "^27.0.0-alpha.3",
     "core-js": "^3.4.3",
     "eslint": "^7.32.0",
@@ -39,6 +39,7 @@
     "husky": "^4.2.1",
     "jest": "^27.1.0",
     "jest-serializer-vue": "^2.0.2",
+    "jest-watch-typeahead": "^0.6.5",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
     "lint-staged": "^10.0.4",
@@ -46,8 +47,7 @@
     "prettier-eslint-cli": "^5.0.0",
     "ts-jest": "^27.0.4",
     "typescript": "~4.5.5",
-    "vue": "3.2.36",
-    "vue-template-compiler": "^2.6.10"
+    "vue": "3.2.36"
   },
   "browserslist": [
     "> 1%",
