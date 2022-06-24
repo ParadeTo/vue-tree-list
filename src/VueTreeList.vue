@@ -54,6 +54,7 @@
           ref="nodeInput"
           :value="model.name"
           @change="updateName"
+          @blur="setUnEditable"
         />
         <!-- @blur="setUnEditable"  v-if="isHover" -->
         <div class="vtl-operation">
@@ -258,11 +259,11 @@ export default {
 
     setEditable() {
       this.editable = true
-      // this.$nextTick(() => {
-      // const $input = this.$refs.nodeInput
-      // $input.focus()
-      // $input.setSelectionRange(0, $input.value.length)
-      // })
+      this.$nextTick(() => {
+        const $input = this.$refs.nodeInput
+        $input.focus()
+        // $input.setSelectionRange(0, $input.value.length)
+      })
     },
 
     setUnEditable(e) {
@@ -479,7 +480,7 @@ export default {
   .vtl-input {
     border: none;
     max-width: 150px;
-    border-bottom: 1px solid blue;
+    border-bottom: 1px solid #1890ff;
   }
   .vtl-operation {
     display: none;
