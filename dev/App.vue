@@ -3,6 +3,7 @@
     <button @click="addNode">Add Node</button>
     <vue-tree-list
       @click="onClick"
+      @click-node="onClickNode"
       @change-name="onChangeName"
       @delete-node="onDel"
       @add-node="onAddNode"
@@ -24,6 +25,9 @@
       </template>
       <template v-slot:addLeafNodeIcon="slotProps">
         <span class="icon">＋</span>
+      </template>
+      <template v-slot:clickNodeIcon="slotProps">
+        <span class="icon">📃click</span>
       </template>
       <template v-slot:editNodeIcon="slotProps">
         <span class="icon">📃</span>
@@ -112,6 +116,11 @@ export default {
     onClick(params) {
       // eslint-disable-next-line no-console
       console.log(params)
+    },
+
+    onClickNode(params) {
+      // eslint-disable-next-line no-console
+      console.log('onClickNode', params)
     },
 
     drop: function({ node, src, target }) {

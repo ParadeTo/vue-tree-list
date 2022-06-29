@@ -23,10 +23,10 @@
         @dragleave="dragLeave"
         @drop="drop"
         @dragend="dragEnd"
-        @mouseover="mouseOver"
-        @mouseout="mouseOut"
         @click.stop="click"
       >
+        <!-- @mouseout="mouseOut" -->
+        <!-- @mouseover="mouseOver" -->
         <span class="vtl-caret vtl-is-small" v-if="model.children && model.children.length > 0">
           <i class="vtl-icon" :class="caretClass" @click.prevent.stop="toggle"></i>
         </span>
@@ -53,10 +53,11 @@
           type="text"
           ref="nodeInput"
           :value="model.name"
-          @input="updateName"
+          @change="updateName"
           @blur="setUnEditable"
         />
-        <div class="vtl-operation" v-show="isHover">
+        <!-- @blur="setUnEditable"  v-if="isHover" -->
+        <div class="vtl-operation">
           <span
             :title="defaultAddTreeNodeTitle"
             @click.stop.prevent="addChild(false)"
@@ -73,6 +74,16 @@
           >
             <slot name="addLeafNodeIcon" :expanded="expanded" :model="model" :root="rootNode">
               <i class="vtl-icon vtl-icon-plus"></i>
+            </slot>
+          </span>
+          <span title="click" @click.stop.prevent="clickNode" v-if="!model.clickNodeDisabled">
+            <slot name="clickNodeIcon" :expanded="expanded" :model="model" :root="rootNode">
+              <i class="vtl-icon"></i>
+            </slot>
+          </span>
+          <span title="click" @click.stop.prevent="copyNode" v-if="!model.copyNodeDisabled">
+            <slot name="copyNodeIcon" :expanded="expanded" :model="model" :root="rootNode">
+              <i class="vtl-icon vtl-icon-copy"></i>
             </slot>
           </span>
           <span title="edit" @click.stop.prevent="setEditable" v-if="!model.editNodeDisabled">
@@ -123,6 +134,12 @@
         </template>
         <template v-slot:editNodeIcon="slotProps">
           <slot name="editNodeIcon" v-bind="slotProps" />
+        </template>
+        <template v-slot:clickNodeIcon="slotProps">
+          <slot name="clickNodeIcon" v-bind="slotProps" />
+        </template>
+        <template v-slot:copyNodeIcon="slotProps">
+          <slot name="copyNodeIcon" v-bind="slotProps" />
         </template>
         <template v-slot:delNodeIcon="slotProps">
           <slot name="delNodeIcon" v-bind="slotProps" />
@@ -237,10 +254,19 @@ export default {
         newName: e.target.value,
         node: this.model
       })
+      this.editable = false
     },
 
     delNode() {
       this.rootNode.$emit('delete-node', this.model)
+    },
+
+    clickNode() {
+      this.rootNode.$emit('click-node', this.model)
+    },
+
+    copyNode() {
+      this.rootNode.$emit('copy-node', this.model)
     },
 
     setEditable() {
@@ -248,7 +274,7 @@ export default {
       this.$nextTick(() => {
         const $input = this.$refs.nodeInput
         $input.focus()
-        $input.setSelectionRange(0, $input.value.length)
+        // $input.setSelectionRange(0, $input.value.length)
       })
     },
 
@@ -466,10 +492,16 @@ export default {
   .vtl-input {
     border: none;
     max-width: 150px;
-    border-bottom: 1px solid blue;
+    border-bottom: 1px solid #1890ff;
+  }
+  .vtl-operation {
+    display: none;
   }
   &:hover {
     background-color: #f0f0f0;
+    .vtl-operation {
+      display: block;
+    }
   }
   &.vtl-active {
     outline: 2px dashed pink;
