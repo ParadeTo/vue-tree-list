@@ -81,6 +81,11 @@
               <i class="vtl-icon"></i>
             </slot>
           </span>
+          <span title="click" @click.stop.prevent="copyNode" v-if="!model.copyNodeDisabled">
+            <slot name="copyNodeIcon" :expanded="expanded" :model="model" :root="rootNode">
+              <i class="vtl-icon vtl-icon-copy"></i>
+            </slot>
+          </span>
           <span title="edit" @click.stop.prevent="setEditable" v-if="!model.editNodeDisabled">
             <slot name="editNodeIcon" :expanded="expanded" :model="model" :root="rootNode">
               <i class="vtl-icon vtl-icon-edit"></i>
@@ -132,6 +137,9 @@
         </template>
         <template v-slot:clickNodeIcon="slotProps">
           <slot name="clickNodeIcon" v-bind="slotProps" />
+        </template>
+        <template v-slot:copyNodeIcon="slotProps">
+          <slot name="copyNodeIcon" v-bind="slotProps" />
         </template>
         <template v-slot:delNodeIcon="slotProps">
           <slot name="delNodeIcon" v-bind="slotProps" />
@@ -255,6 +263,10 @@ export default {
 
     clickNode() {
       this.rootNode.$emit('click-node', this.model)
+    },
+
+    copyNode() {
+      this.rootNode.$emit('copy-node', this.model)
     },
 
     setEditable() {
