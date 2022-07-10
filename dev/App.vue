@@ -19,19 +19,19 @@
           {{ slotProps.model.name }} <span class="muted">#{{ slotProps.model.id }}</span>
         </span>
       </template>
-      <template v-slot:addTreeNodeIcon="slotProps">
+      <template v-slot:addTreeNodeIcon>
         <span class="icon">📂</span>
       </template>
-      <template v-slot:addLeafNodeIcon="slotProps">
+      <template v-slot:addLeafNodeIcon>
         <span class="icon">＋</span>
       </template>
-      <template v-slot:editNodeIcon="slotProps">
+      <template v-slot:editNodeIcon>
         <span class="icon">📃</span>
       </template>
-      <template v-slot:delNodeIcon="slotProps">
+      <template v-slot:delNodeIcon>
         <span class="icon">✂️</span>
       </template>
-      <template v-slot:leafNodeIcon="slotProps">
+      <template v-slot:leafNodeIcon>
         <span class="icon">🍃</span>
       </template>
       <template v-slot:treeNodeIcon="slotProps">
@@ -50,9 +50,11 @@
     </pre>
   </div>
 </template>
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import { VueTreeList, Tree, TreeNode } from '../src'
-export default {
+
+export default defineComponent({
   components: {
     VueTreeList
   },
@@ -137,8 +139,8 @@ export default {
 
     getNewTree() {
       var vm = this
-      function _dfs(oldNode) {
-        var newNode = {}
+      function _dfs(oldNode: TreeNode) {
+        var newNode = {} as TreeNode
 
         for (var k in oldNode) {
           if (k !== 'children' && k !== 'parent') {
@@ -158,7 +160,7 @@ export default {
       vm.newTree = _dfs(vm.data)
     }
   }
-}
+})
 </script>
 <style lang="less" rel="stylesheet/less">
 .vtl {

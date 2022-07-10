@@ -6,14 +6,15 @@
   "extends": [
     "plugin:vue/essential",
     "plugin:prettier/recommended",
-    "eslint:recommended"
+    "eslint:recommended",
+    "@vue/typescript"
   ],
   "rules": {
     "prettier/prettier": "error",
     "no-console": "warn"
   },
   "parserOptions": {
-    "parser": "babel-eslint"
+    "parser": "@typescript-eslint/parser"
   },
   "overrides": [
     {

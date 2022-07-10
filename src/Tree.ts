@@ -9,27 +9,42 @@ import { traverseTree } from './tools'
  *   dragDisabled: decide if it can be dragged
  *   disabled: desabled all operation
  */
+
+interface Data {
+  name: string
+  isLeaf?: boolean
+  id?: string | number
+  dragDisabled?: boolean
+  pid?: string | number
+  disabled?: boolean
+  addTreeNodeDisabled?: boolean
+  addLeafNodeDisabled?: boolean
+  editNodeDisabled?: boolean
+  delNodeDisabled?: boolean
+  children?: Data[]
+}
+
 export class TreeNode {
-  constructor(data) {
+  id: string | number
+  parent?: TreeNode | null
+  children: TreeNode[]
+  isLeaf?: boolean
+  name: string
+  pid?: string | number
+  constructor(data: Data) {
     const { id, isLeaf } = data
     this.id = typeof id === 'undefined' ? new Date().valueOf() : id
     this.parent = null
-    this.children = null
+    this.children = []
     this.isLeaf = !!isLeaf
-
-    // other params
-    for (var k in data) {
-      if (k !== 'id' && k !== 'children' && k !== 'isLeaf') {
-        this[k] = data[k]
-      }
-    }
+    this.name = data['name']
   }
 
-  changeName(name) {
+  changeName(name: string) {
     this.name = name
   }
 
-  addChildren(children) {
+  addChildren(children: TreeNode | TreeNode[]) {
     if (!this.children) {
       this.children = []
     }
@@ -52,13 +67,16 @@ export class TreeNode {
   // remove self
   remove() {
     const parent = this.parent
-    const index = parent.findChildIndex(this)
-    parent.children.splice(index, 1)
+    if (parent) {
+      const index = parent.findChildIndex(this)
+      index && parent.children?.splice(index, 1)
+    }
   }
 
   // remove child
-  _removeChild(child) {
-    for (var i = 0, len = this.children.length; i < len; i++) {
+  _removeChild(child: TreeNode) {
+    if (!this.children) return
+    for (let i = 0, len = this.children.length; i < len; i++) {
       if (this.children[i] === child) {
         this.children.splice(i, 1)
         break
@@ -66,7 +84,7 @@ export class TreeNode {
     }
   }
 
-  isTargetChild(target) {
+  isTargetChild(target: TreeNode) {
     let parent = target.parent
     while (parent) {
       if (parent === this) {
@@ -77,7 +95,7 @@ export class TreeNode {
     return false
   }
 
-  moveInto(target) {
+  moveInto(target: TreeNode) {
     if (this.name === 'root' || this === target) {
       return
     }
@@ -92,7 +110,7 @@ export class TreeNode {
       return
     }
 
-    this.parent._removeChild(this)
+    this.parent?._removeChild(this)
     this.parent = target
     this.pid = target.id
     if (!target.children) {
@@ -101,8 +119,8 @@ export class TreeNode {
     target.children.unshift(this)
   }
 
-  findChildIndex(child) {
-    var index
+  findChildIndex(child: TreeNode) {
+    let index
     for (let i = 0, len = this.children.length; i < len; i++) {
       if (this.children[i] === child) {
         index = i
@@ -112,7 +130,7 @@ export class TreeNode {
     return index
   }
 
-  _canInsert(target) {
+  _canInsert(target: TreeNode) {
     if (this.name === 'root' || this === target) {
       return false
     }
@@ -122,24 +140,26 @@ export class TreeNode {
       return false
     }
 
-    this.parent._removeChild(this)
+    this.parent?._removeChild(this)
     this.parent = target.parent
-    this.pid = target.parent.id
+    this.pid = target.parent?.id
     return true
   }
 
-  insertBefore(target) {
+  insertBefore(target: TreeNode) {
     if (!this._canInsert(target)) return
-
-    const pos = target.parent.findChildIndex(target)
-    target.parent.children.splice(pos, 0, this)
+    if (target.parent) {
+      const pos = target.parent.findChildIndex(target)
+      pos && target.parent.children?.splice(pos, 0, this)
+    }
   }
 
-  insertAfter(target) {
+  insertAfter(target: TreeNode) {
     if (!this._canInsert(target)) return
-
-    const pos = target.parent.findChildIndex(target)
-    target.parent.children.splice(pos + 1, 0, this)
+    if (target.parent) {
+      const pos = target.parent.findChildIndex(target)
+      pos && target.parent.children?.splice(pos + 1, 0, this)
+    }
   }
 
   toString() {
@@ -148,17 +168,19 @@ export class TreeNode {
 }
 
 export class Tree {
-  constructor(data) {
+  root: TreeNode
+  constructor(data: Data[]) {
     this.root = new TreeNode({ name: 'root', isLeaf: false, id: 0 })
     this.initNode(this.root, data)
+    // @ts-ignore
     return this.root
   }
 
-  initNode(node, data) {
+  initNode(node: TreeNode, data: Data[]) {
     for (let i = 0, len = data.length; i < len; i++) {
-      var _data = data[i]
+      const _data = data[i]
 
-      var child = new TreeNode(_data)
+      const child = new TreeNode(_data)
       if (_data.children && _data.children.length > 0) {
         this.initNode(child, _data.children)
       }
