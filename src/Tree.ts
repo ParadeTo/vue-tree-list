@@ -15,7 +15,13 @@ interface Data {
   isLeaf?: boolean
   id?: string | number
   dragDisabled?: boolean
+  pid?: string | number
   disabled?: boolean
+  addTreeNodeDisabled?: boolean
+  addLeafNodeDisabled?: boolean
+  editNodeDisabled?: boolean
+  delNodeDisabled?: boolean
+  children?: Data[]
 }
 
 export class TreeNode {
@@ -163,14 +169,14 @@ export class TreeNode {
 
 export class Tree {
   root: TreeNode
-  constructor(data: TreeNode[]) {
+  constructor(data: Data[]) {
     this.root = new TreeNode({ name: 'root', isLeaf: false, id: 0 })
     this.initNode(this.root, data)
     // @ts-ignore
     return this.root
   }
 
-  initNode(node: TreeNode, data: TreeNode[]) {
+  initNode(node: TreeNode, data: Data[]) {
     for (let i = 0, len = data.length; i < len; i++) {
       const _data = data[i]
 

@@ -14,7 +14,6 @@
     "test:coverage": "vue-cli-service test:unit --coverage"
   },
   "main": "dist/vue-tree-list.umd.min.js",
-  "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.12.16",
     "@babel/eslint-parser": "^7.12.16",
@@ -29,7 +28,7 @@
     "@vue/compat": "3.2.36",
     "@vue/eslint-config-typescript": "^9.1.0",
     "@vue/test-utils": "^2.0.0-rc.18",
-    "@vue/vue3-jest": "^27.0.0-alpha.3",
+    "@vue/vue3-jest": "^27.0.0",
     "core-js": "^3.4.3",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^6.10.0",

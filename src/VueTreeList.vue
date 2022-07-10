@@ -110,6 +110,7 @@
         :default-leaf-node-name="defaultLeafNodeName"
         :default-expanded="defaultExpanded"
         :model="m"
+        :root="rootNode"
         :key="m.id"
       >
         <template v-slot:leafNameDisplay="slotProps">
@@ -160,6 +161,10 @@ const Comp = defineComponent({
     }
   },
   props: {
+    root: {
+      required: false,
+      type: Object
+    },
     model: {
       required: true,
       type: Object
@@ -187,13 +192,8 @@ const Comp = defineComponent({
   },
   computed: {
     rootNode() {
-      var node = this.$parent
-      // @ts-ignore
-      while (node?.$props.model.name !== 'root') {
-        // @ts-ignore
-        node = node.$parent
-      }
-      return node
+      let node = this.root ?? this.$parent
+      return node!
     },
 
     caretClass() {
@@ -228,7 +228,7 @@ const Comp = defineComponent({
     }
     window.addEventListener('keyup', blurHandler)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('keyup', blurHandler)
   },
   methods: {

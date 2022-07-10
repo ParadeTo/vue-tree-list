@@ -139,8 +139,8 @@ export default defineComponent({
 
     getNewTree() {
       var vm = this
-      function _dfs(oldNode) {
-        var newNode = {}
+      function _dfs(oldNode: TreeNode) {
+        var newNode = {} as TreeNode
 
         for (var k in oldNode) {
           if (k !== 'children' && k !== 'parent') {
