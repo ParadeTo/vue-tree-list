@@ -55,6 +55,7 @@
           :value="model.name"
           @input="updateName"
           @blur="setUnEditable"
+          @keyup.enter="setUnEditable"
         />
         <div class="vtl-operation" v-show="isHover">
           <span
@@ -140,7 +141,7 @@
 
 <script>
 import { TreeNode } from './Tree.js'
-import { addHandler, removeHandler } from './tools.js'
+import { removeHandler } from './tools.js'
 
 let compInOperation = null
 
@@ -215,15 +216,6 @@ export default {
   beforeCreate() {
     this.$options.components.item = require('./VueTreeList').default
   },
-  mounted() {
-    const vm = this
-    addHandler(window, 'keyup', function(e) {
-      // click enter
-      if (e.keyCode === 13 && vm.editable) {
-        vm.editable = false
-      }
-    })
-  },
   beforeDestroy() {
     removeHandler(window, 'keyup')
   },
@@ -253,6 +245,7 @@ export default {
     },
 
     setUnEditable(e) {
+      if (this.editable === false) return
       this.editable = false
       var oldName = this.model.name
       this.model.changeName(e.target.value)
