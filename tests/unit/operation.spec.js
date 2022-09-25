@@ -75,8 +75,7 @@ describe('Operation', () => {
       const $input = wrapper.find('#t1 .vtl-input')
       $input.element.value = 'New Node 1'
       $input.trigger('input')
-      var event = new KeyboardEvent('keyup', { keyCode: 13 })
-      window.dispatchEvent(event)
+      $input.trigger('blur')
       Vue.nextTick(() => {
         expect(wrapper.find('#t1').text()).toBe('New Node 1')
         done()
