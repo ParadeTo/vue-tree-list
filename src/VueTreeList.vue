@@ -231,6 +231,8 @@ export default {
     updateName(e) {
       var oldName = this.model.name
       this.model.changeName(e.target.value)
+      // eslint-disable-next-line no-console
+      console.log('update Name')
       this.rootNode.$emit('change-name', {
         id: this.model.id,
         oldName: oldName,
@@ -261,6 +263,11 @@ export default {
         oldName: oldName,
         newName: e.target.value,
         eventType: 'blur'
+      })
+      this.rootNode.$emit('end-edit', {
+        id: this.model.id,
+        oldName: oldName,
+        newName: e.target.value
       })
     },
 

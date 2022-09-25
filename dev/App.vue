@@ -4,6 +4,7 @@
     <vue-tree-list
       @click="onClick"
       @change-name="onChangeName"
+      @end-edit="onEndEdit"
       @delete-node="onDel"
       @add-node="onAddNode"
       @drop="drop"
@@ -95,23 +96,26 @@ export default {
   methods: {
     onDel(node) {
       // eslint-disable-next-line no-console
-      console.log(node)
+      console.log('onDel', node)
       node.remove()
+    },
+    onEndEdit(params) {
+      console.log('onEndEdit', params)
     },
 
     onChangeName(params) {
       // eslint-disable-next-line no-console
-      console.log(params)
+      console.log('onChangeName', params)
     },
 
     onAddNode(params) {
       // eslint-disable-next-line no-console
-      console.log(params)
+      console.log('onAddNode', params)
     },
 
     onClick(params) {
       // eslint-disable-next-line no-console
-      console.log(params)
+      console.log('onClick', params)
     },
 
     drop: function({ node, src, target }) {
