@@ -26,6 +26,7 @@
         @mouseover="mouseOver"
         @mouseout="mouseOut"
         @click.stop="click"
+        @dblclick.stop="dbClick"
       >
         <span class="vtl-caret vtl-is-small" v-if="model.children && model.children.length > 0">
           <i class="vtl-icon" :class="caretClass" @click.prevent.stop="toggle"></i>
@@ -110,6 +111,7 @@
         :default-tree-node-name="defaultTreeNodeName"
         :default-leaf-node-name="defaultLeafNodeName"
         :default-expanded="defaultExpanded"
+        :db-click-to-edit="dbClickToEdit"
         :model="model"
         :key="model.id"
       >
@@ -180,6 +182,10 @@ export default {
     defaultExpanded: {
       type: Boolean,
       default: true
+    },
+    dbClickToEdit: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -284,6 +290,12 @@ export default {
         toggle: this.toggle,
         ...this.model
       })
+    },
+
+    dbClick() {
+      if (this.dbClickToEdit) {
+        this.setEditable()
+      }
     },
 
     addChild(isLeaf) {
