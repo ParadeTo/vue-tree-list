@@ -4,6 +4,19 @@
 
 A vue component for tree structure. Support adding treenode/leafnode, editing node's name and dragging.
 
+> ⚠️ Version compatibility notice
+>
+> - `vue-tree-list@2.0.0` (and all `2.x`) is **Vue 3 only**.
+> - If your project is still on Vue 2, please install `vue-tree-list@1`.
+
+## Migration from Vue 2 to Vue 3
+
+- Install the Vue 3 line: `npm install vue-tree-list@^2`.
+- Global registration changes from `Vue.use(...)` to `app.use(install)` (or `app.component('VueTreeList', VueTreeList)`).
+- `model` should pass the root node: `new Tree(data).root`.
+- Replace old slot syntax like `slot="..."` with `v-slot` templates.
+- `2.x` includes `end-edit` event for edit completion; keep `change-name` for name-change flow.
+
 ![vue-tree-demo.gif](https://raw.githubusercontent.com/ParadeTo/vue-tree-list/master/img/demo.gif)
 
 [Live Demo](http://paradeto.com/vue-tree-list/)
@@ -11,6 +24,10 @@ A vue component for tree structure. Support adding treenode/leafnode, editing no
 # install
 
 Install the plugin then you can use the component globally.
+
+For Vue 3 projects:
+
+`npm install vue-tree-list@^2`
 
 ```js
 import { createApp } from 'vue'
@@ -31,6 +48,8 @@ Or just register locally like the example below.
 # use
 
 `npm install vue-tree-list`
+
+If you are using Vue 2, use `npm install vue-tree-list@1`.
 
 ```html
 <template>
