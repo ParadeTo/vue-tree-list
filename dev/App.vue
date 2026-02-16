@@ -1,38 +1,32 @@
 <template>
   <div>
     <button @click="addNode">Add Node</button>
-    <vue-tree-list
+    <button @click="getTreeChange">Get tree change</button>
+    <VueTreeList
       @click="onClick"
-      @change-name="onChangeName"
-      @end-edit="onEndEdit"
-      @delete-node="onDel"
-      @add-node="onAddNode"
-      @drop="drop"
-      @drop-before="dropBefore"
-      @drop-after="dropAfter"
       :model="data"
       default-tree-node-name="new node"
       default-leaf-node-name="new leaf"
-      v-bind:default-expanded="false"
+      :default-expanded="false"
     >
       <template v-slot:leafNameDisplay="slotProps">
         <span>
           {{ slotProps.model.name }} <span class="muted">#{{ slotProps.model.id }}</span>
         </span>
       </template>
-      <template v-slot:addTreeNodeIcon="slotProps">
+      <template v-slot:addTreeNodeIcon>
         <span class="icon">📂</span>
       </template>
-      <template v-slot:addLeafNodeIcon="slotProps">
+      <template v-slot:addLeafNodeIcon>
         <span class="icon">＋</span>
       </template>
-      <template v-slot:editNodeIcon="slotProps">
+      <template v-slot:editNodeIcon>
         <span class="icon">📃</span>
       </template>
-      <template v-slot:delNodeIcon="slotProps">
+      <template v-slot:delNodeIcon>
         <span class="icon">✂️</span>
       </template>
-      <template v-slot:leafNodeIcon="slotProps">
+      <template v-slot:leafNodeIcon>
         <span class="icon">🍃</span>
       </template>
       <template v-slot:treeNodeIcon="slotProps">
@@ -44,126 +38,110 @@
           }}</span
         >
       </template>
-    </vue-tree-list>
+    </VueTreeList>
     <button @click="getNewTree">Get new tree</button>
+    <p>isMobile: {{ isMobile }}</p>
+    <pre>
+      {{ record }}
+    </pre>
     <pre>
       {{ newTree }}
     </pre>
   </div>
 </template>
-<script>
+
+<script setup lang="ts">
+import { ref } from 'vue'
 import { VueTreeList, Tree, TreeNode } from '../src'
-export default {
-  components: {
-    VueTreeList
-  },
-  data() {
-    return {
-      newTree: {},
-      data: new Tree([
-        {
-          name: 'Node 1',
-          id: 1,
-          pid: 0,
-          dragDisabled: true,
-          addTreeNodeDisabled: true,
-          addLeafNodeDisabled: true,
-          editNodeDisabled: true,
-          delNodeDisabled: true,
-          children: [
-            {
-              name: 'Node 1-2',
-              id: 2,
-              isLeaf: true,
-              pid: 1
-            }
-          ]
-        },
-        {
-          name: 'Node 2',
-          id: 3,
-          pid: 0,
-          disabled: true
-        },
-        {
-          name: 'Node 3',
-          id: 4,
-          pid: 0
-        }
-      ])
-    }
-  },
-  methods: {
-    onDel(node) {
-      // eslint-disable-next-line no-console
-      console.log('onDel', node)
-      node.remove()
-    },
-    onEndEdit(params) {
-      console.log('onEndEdit', params)
-    },
 
-    onChangeName(params) {
-      // eslint-disable-next-line no-console
-      console.log('onChangeName', params)
-    },
+function detectMobile(): boolean {
+  const userAgent = navigator.userAgent.toLowerCase()
 
-    onAddNode(params) {
-      // eslint-disable-next-line no-console
-      console.log('onAddNode', params)
-    },
+  const isIpad = /ipad/i.test(userAgent)
+  const isIphoneOs = /iphone os/i.test(userAgent)
+  const isMidp = /midp/i.test(userAgent)
+  const isUc7 = /rv:1.2.3.4/i.test(userAgent)
+  const isUc = /ucweb/i.test(userAgent)
+  const isAndroid = /android/i.test(userAgent)
+  const isCE = /windows ce/i.test(userAgent)
+  const isWM = /windows mobile/i.test(userAgent)
+  const isWx = /MicroMessenger/i.test(userAgent)
 
-    onClick(params) {
-      // eslint-disable-next-line no-console
-      console.log('onClick', params)
-    },
+  return isIpad || isIphoneOs || isMidp || isUc7 || isUc || isAndroid || isCE || isWM || isWx
+}
 
-    drop: function({ node, src, target }) {
-      // eslint-disable-next-line no-console
-      console.log('drop', node, src, target)
-    },
+function getTreeSnapshot(oldNode: TreeNode): Record<string, unknown> {
+  const newNode: Record<string, unknown> = {}
 
-    dropBefore: function({ node, src, target }) {
-      // eslint-disable-next-line no-console
-      console.log('drop-before', node, src, target)
-    },
-
-    dropAfter: function({ node, src, target }) {
-      // eslint-disable-next-line no-console
-      console.log('drop-after', node, src, target)
-    },
-
-    addNode() {
-      var node = new TreeNode({ name: 'new node', isLeaf: false })
-      if (!this.data.children) this.data.children = []
-      this.data.addChildren(node)
-    },
-
-    getNewTree() {
-      var vm = this
-      function _dfs(oldNode) {
-        var newNode = {}
-
-        for (var k in oldNode) {
-          if (k !== 'children' && k !== 'parent') {
-            newNode[k] = oldNode[k]
-          }
-        }
-
-        if (oldNode.children && oldNode.children.length > 0) {
-          newNode.children = []
-          for (var i = 0, len = oldNode.children.length; i < len; i++) {
-            newNode.children.push(_dfs(oldNode.children[i]))
-          }
-        }
-        return newNode
-      }
-
-      vm.newTree = _dfs(vm.data)
+  for (const k in oldNode) {
+    if (k !== 'children' && k !== 'parent') {
+      newNode[k] = (oldNode as Record<string, unknown>)[k]
     }
   }
+
+  if (oldNode.children && oldNode.children.length > 0) {
+    newNode.children = []
+    for (let i = 0, len = oldNode.children.length; i < len; i++) {
+      ;(newNode.children as Record<string, unknown>[]).push(getTreeSnapshot(oldNode.children[i]))
+    }
+  }
+
+  return newNode
+}
+
+const isMobileValue = detectMobile()
+const isMobile = ref(isMobileValue)
+const record = ref<Record<string, unknown> | null>(null)
+const newTree = ref<Record<string, unknown>>({})
+const data = ref(
+  new Tree([
+    {
+      name: 'Node 1',
+      id: 1,
+      pid: 0,
+      dragDisabled: true,
+      children: [
+        {
+          name: 'Node 1-2',
+          id: 2,
+          isLeaf: true,
+          pid: 1,
+        },
+      ],
+    },
+    {
+      name: 'Node 2',
+      id: 3,
+      pid: 0,
+      disabled: true,
+    },
+    {
+      name: 'Node 3',
+      id: 4,
+      pid: 0,
+    },
+  ]).root,
+)
+
+function getTreeChange() {
+  record.value = getTreeSnapshot(data.value)
+}
+
+function addNode() {
+  const node = new TreeNode({ name: 'new node', isLeaf: false })
+  if (!data.value.children) data.value.children = []
+  data.value.addChildren(node)
+}
+
+function getNewTree() {
+  newTree.value = getTreeSnapshot(data.value)
+}
+
+function onClick(model: Record<string, unknown>) {
+  console.log(model)
 }
 </script>
+
 <style lang="less" rel="stylesheet/less">
 .vtl {
   .vtl-drag-disabled {
