@@ -1,38 +1,38 @@
 <template>
   <div>
     <button @click="addNode">Add Node</button>
-    <vue-tree-list
+    <VueTreeList
       @click="onClick"
       @change-name="onChangeName"
       @end-edit="onEndEdit"
       @delete-node="onDel"
       @add-node="onAddNode"
-      @drop="drop"
+      @drop="onDrop"
       @drop-before="dropBefore"
       @drop-after="dropAfter"
       :model="data"
       default-tree-node-name="new node"
       default-leaf-node-name="new leaf"
-      v-bind:default-expanded="false"
+      :default-expanded="false"
     >
       <template v-slot:leafNameDisplay="slotProps">
         <span>
           {{ slotProps.model.name }} <span class="muted">#{{ slotProps.model.id }}</span>
         </span>
       </template>
-      <template v-slot:addTreeNodeIcon="slotProps">
+      <template v-slot:addTreeNodeIcon>
         <span class="icon">📂</span>
       </template>
-      <template v-slot:addLeafNodeIcon="slotProps">
+      <template v-slot:addLeafNodeIcon>
         <span class="icon">＋</span>
       </template>
-      <template v-slot:editNodeIcon="slotProps">
+      <template v-slot:editNodeIcon>
         <span class="icon">📃</span>
       </template>
-      <template v-slot:delNodeIcon="slotProps">
+      <template v-slot:delNodeIcon>
         <span class="icon">✂️</span>
       </template>
-      <template v-slot:leafNodeIcon="slotProps">
+      <template v-slot:leafNodeIcon>
         <span class="icon">🍃</span>
       </template>
       <template v-slot:treeNodeIcon="slotProps">
@@ -44,126 +44,132 @@
           }}</span
         >
       </template>
-    </vue-tree-list>
+    </VueTreeList>
     <button @click="getNewTree">Get new tree</button>
     <pre>
       {{ newTree }}
     </pre>
   </div>
 </template>
-<script>
+
+<script setup lang="ts">
+import { ref } from 'vue'
 import { VueTreeList, Tree, TreeNode } from '../src'
-export default {
-  components: {
-    VueTreeList
-  },
-  data() {
-    return {
-      newTree: {},
-      data: new Tree([
+import type { TreeNodeData } from '../src'
+
+const newTree = ref<Record<string, unknown>>({})
+const data = ref(
+  new Tree([
+    {
+      name: 'Node 1',
+      id: 1,
+      pid: 0,
+      dragDisabled: true,
+      addTreeNodeDisabled: true,
+      addLeafNodeDisabled: true,
+      editNodeDisabled: true,
+      delNodeDisabled: true,
+      children: [
         {
-          name: 'Node 1',
-          id: 1,
-          pid: 0,
-          dragDisabled: true,
-          addTreeNodeDisabled: true,
-          addLeafNodeDisabled: true,
-          editNodeDisabled: true,
-          delNodeDisabled: true,
-          children: [
-            {
-              name: 'Node 1-2',
-              id: 2,
-              isLeaf: true,
-              pid: 1
-            }
-          ]
+          name: 'Node 1-2',
+          id: 2,
+          isLeaf: true,
+          pid: 1,
         },
-        {
-          name: 'Node 2',
-          id: 3,
-          pid: 0,
-          disabled: true
-        },
-        {
-          name: 'Node 3',
-          id: 4,
-          pid: 0
-        }
-      ])
-    }
-  },
-  methods: {
-    onDel(node) {
-      // eslint-disable-next-line no-console
-      console.log('onDel', node)
-      node.remove()
+      ],
     },
-    onEndEdit(params) {
-      console.log('onEndEdit', params)
+    {
+      name: 'Node 2',
+      id: 3,
+      pid: 0,
+      disabled: true,
     },
-
-    onChangeName(params) {
-      // eslint-disable-next-line no-console
-      console.log('onChangeName', params)
+    {
+      name: 'Node 3',
+      id: 4,
+      pid: 0,
     },
+  ]).root,
+)
 
-    onAddNode(params) {
-      // eslint-disable-next-line no-console
-      console.log('onAddNode', params)
-    },
+function onDel(node: TreeNode) {
+  console.log('onDel', node)
+  node.remove()
+}
 
-    onClick(params) {
-      // eslint-disable-next-line no-console
-      console.log('onClick', params)
-    },
+function onEndEdit(params: Record<string, unknown>) {
+  console.log('onEndEdit', params)
+}
 
-    drop: function({ node, src, target }) {
-      // eslint-disable-next-line no-console
-      console.log('drop', node, src, target)
-    },
+function onChangeName(params: Record<string, unknown>) {
+  console.log('onChangeName', params)
+}
 
-    dropBefore: function({ node, src, target }) {
-      // eslint-disable-next-line no-console
-      console.log('drop-before', node, src, target)
-    },
+function onAddNode(params: TreeNode) {
+  console.log('onAddNode', params)
+}
 
-    dropAfter: function({ node, src, target }) {
-      // eslint-disable-next-line no-console
-      console.log('drop-after', node, src, target)
-    },
+function onClick(params: Record<string, unknown>) {
+  console.log('onClick', params)
+}
 
-    addNode() {
-      var node = new TreeNode({ name: 'new node', isLeaf: false })
-      if (!this.data.children) this.data.children = []
-      this.data.addChildren(node)
-    },
+function onDrop({ node, src, target }: { node: TreeNode; src: TreeNode | null; target: TreeNode }) {
+  console.log('drop', node, src, target)
+}
 
-    getNewTree() {
-      var vm = this
-      function _dfs(oldNode) {
-        var newNode = {}
+function dropBefore({
+  node,
+  src,
+  target,
+}: {
+  node: TreeNode
+  src: TreeNode | null
+  target: TreeNode
+}) {
+  console.log('drop-before', node, src, target)
+}
 
-        for (var k in oldNode) {
-          if (k !== 'children' && k !== 'parent') {
-            newNode[k] = oldNode[k]
-          }
-        }
+function dropAfter({
+  node,
+  src,
+  target,
+}: {
+  node: TreeNode
+  src: TreeNode | null
+  target: TreeNode
+}) {
+  console.log('drop-after', node, src, target)
+}
 
-        if (oldNode.children && oldNode.children.length > 0) {
-          newNode.children = []
-          for (var i = 0, len = oldNode.children.length; i < len; i++) {
-            newNode.children.push(_dfs(oldNode.children[i]))
-          }
-        }
-        return newNode
+function addNode() {
+  const node = new TreeNode({ name: 'new node', isLeaf: false })
+  if (!data.value.children) data.value.children = []
+  data.value.addChildren(node)
+}
+
+function getNewTree() {
+  function _dfs(oldNode: TreeNode): Record<string, unknown> {
+    const newNode: Record<string, unknown> = {}
+
+    for (const k in oldNode) {
+      if (k !== 'children' && k !== 'parent') {
+        newNode[k] = (oldNode as Record<string, unknown>)[k]
       }
-
-      vm.newTree = _dfs(vm.data)
     }
+
+    if (oldNode.children && oldNode.children.length > 0) {
+      newNode.children = []
+      for (let i = 0, len = oldNode.children.length; i < len; i++) {
+        ;(newNode.children as Record<string, unknown>[]).push(_dfs(oldNode.children[i]))
+      }
+    }
+    return newNode
   }
+
+  newTree.value = _dfs(data.value)
 }
 </script>
+
 <style lang="less" rel="stylesheet/less">
 .vtl {
   .vtl-drag-disabled {

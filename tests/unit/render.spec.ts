@@ -1,5 +1,6 @@
+import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { Tree, VueTreeList } from '@/index'
+import { Tree, VueTreeList } from '../../src/index'
 
 describe('Render', () => {
   it('render correctly', () => {
@@ -18,32 +19,32 @@ describe('Render', () => {
             name: 'Node 1-2',
             id: 2,
             isLeaf: true,
-            pid: 1
-          }
-        ]
+            pid: 1,
+          },
+        ],
       },
       {
         name: 'Node 2',
         id: 3,
         pid: 0,
-        disabled: true
+        disabled: true,
       },
       {
         name: 'Node 3',
         id: 4,
-        pid: 0
-      }
+        pid: 0,
+      },
     ])
 
     const wrapper = mount(VueTreeList, {
-      propsData: {
-        model: tree,
+      props: {
+        model: tree.root,
         defaultTreeNodeName: 'new node',
         defaultLeafNodeName: 'new leaf',
-        defaultExpanded: false
-      }
+        defaultExpanded: false,
+      },
     })
 
-    expect(wrapper).toMatchSnapshot()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })
