@@ -1,6 +1,6 @@
 ## Purpose
 
-TBD: synced from change-to-vue3-version.
+This specification defines the build, packaging, and testing requirements for the Vue 3 component library using Vite, including library mode outputs (ESM and UMD), package.json entry configuration, TypeScript compilation and type declarations, Vite dev server behavior, and Vitest integration.
 
 ## Requirements
 
