@@ -13,10 +13,17 @@ A vue component for tree structure. Support adding treenode/leafnode, editing no
 Install the plugin then you can use the component globally.
 
 ```js
-import Vue from 'vue'
-import VueTreeList from 'vue-tree-list'
+import { createApp } from 'vue'
+import App from './App.vue'
+import { VueTreeList, install } from 'vue-tree-list'
 
-Vue.use(VueTreeList)
+const app = createApp(App)
+
+// register globally as a plugin
+app.use(install)
+
+// or register component manually
+app.component('VueTreeList', VueTreeList)
 ```
 
 Or just register locally like the example below.
@@ -29,124 +36,156 @@ Or just register locally like the example below.
 <template>
   <div>
     <button @click="addNode">Add Node</button>
-    <vue-tree-list
+    <VueTreeList
       @click="onClick"
       @change-name="onChangeName"
+      @end-edit="onEndEdit"
       @delete-node="onDel"
       @add-node="onAddNode"
+      @drop="onDrop"
+      @drop-before="dropBefore"
+      @drop-after="dropAfter"
       :model="data"
       default-tree-node-name="new node"
       default-leaf-node-name="new leaf"
-      v-bind:default-expanded="false"
+      :default-expanded="false"
     >
       <template v-slot:leafNameDisplay="slotProps">
         <span>
           {{ slotProps.model.name }} <span class="muted">#{{ slotProps.model.id }}</span>
         </span>
       </template>
-      <span class="icon" slot="addTreeNodeIcon">📂</span>
-      <span class="icon" slot="addLeafNodeIcon">＋</span>
-      <span class="icon" slot="editNodeIcon">📃</span>
-      <span class="icon" slot="delNodeIcon">✂️</span>
-      <span class="icon" slot="leafNodeIcon">🍃</span>
-      <span class="icon" slot="treeNodeIcon">🌲</span>
-    </vue-tree-list>
+      <template v-slot:addTreeNodeIcon>
+        <span class="icon">📂</span>
+      </template>
+      <template v-slot:addLeafNodeIcon>
+        <span class="icon">＋</span>
+      </template>
+      <template v-slot:editNodeIcon>
+        <span class="icon">📃</span>
+      </template>
+      <template v-slot:delNodeIcon>
+        <span class="icon">✂️</span>
+      </template>
+      <template v-slot:leafNodeIcon>
+        <span class="icon">🍃</span>
+      </template>
+      <template v-slot:treeNodeIcon="slotProps">
+        <span class="icon">
+          {{
+            slotProps.model.children && slotProps.model.children.length > 0 && !slotProps.expanded
+              ? '🌲'
+              : ''
+          }}
+        </span>
+      </template>
+    </VueTreeList>
     <button @click="getNewTree">Get new tree</button>
     <pre>
-      {{newTree}}
+      {{ newTree }}
     </pre>
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+  import { ref } from 'vue'
   import { VueTreeList, Tree, TreeNode } from 'vue-tree-list'
-  export default {
-    components: {
-      VueTreeList
-    },
-    data() {
-      return {
-        newTree: {},
-        data: new Tree([
+  import type { TreeNodeData } from 'vue-tree-list'
+
+  const newTree = ref<Record<string, unknown>>({})
+  const data = ref(
+    new Tree([
+      {
+        name: 'Node 1',
+        id: 1,
+        pid: 0,
+        dragDisabled: true,
+        addTreeNodeDisabled: true,
+        addLeafNodeDisabled: true,
+        editNodeDisabled: true,
+        delNodeDisabled: true,
+        children: [
           {
-            name: 'Node 1',
-            id: 1,
-            pid: 0,
-            dragDisabled: true,
-            addTreeNodeDisabled: true,
-            addLeafNodeDisabled: true,
-            editNodeDisabled: true,
-            delNodeDisabled: true,
-            children: [
-              {
-                name: 'Node 1-2',
-                id: 2,
-                isLeaf: true,
-                pid: 1
-              }
-            ]
-          },
-          {
-            name: 'Node 2',
-            id: 3,
-            pid: 0,
-            disabled: true
-          },
-          {
-            name: 'Node 3',
-            id: 4,
-            pid: 0
+            name: 'Node 1-2',
+            id: 2,
+            isLeaf: true,
+            pid: 1
           }
-        ])
+        ]
+      },
+      {
+        name: 'Node 2',
+        id: 3,
+        pid: 0,
+        disabled: true
+      },
+      {
+        name: 'Node 3',
+        id: 4,
+        pid: 0
       }
-    },
-    methods: {
-      onDel(node) {
-        console.log(node)
-        node.remove()
-      },
+    ]).root
+  )
 
-      onChangeName(params) {
-        console.log(params)
-      },
+  function onDel(node: TreeNode) {
+    console.log('onDel', node)
+    node.remove()
+  }
 
-      onAddNode(params) {
-        console.log(params)
-      },
+  function onEndEdit(params: Record<string, unknown>) {
+    console.log('onEndEdit', params)
+  }
 
-      onClick(params) {
-        console.log(params)
-      },
+  function onChangeName(params: Record<string, unknown>) {
+    console.log('onChangeName', params)
+  }
 
-      addNode() {
-        var node = new TreeNode({ name: 'new node', isLeaf: false })
-        if (!this.data.children) this.data.children = []
-        this.data.addChildren(node)
-      },
+  function onAddNode(params: TreeNode) {
+    console.log('onAddNode', params)
+  }
 
-      getNewTree() {
-        var vm = this
-        function _dfs(oldNode) {
-          var newNode = {}
+  function onClick(params: Record<string, unknown>) {
+    console.log('onClick', params)
+  }
 
-          for (var k in oldNode) {
-            if (k !== 'children' && k !== 'parent') {
-              newNode[k] = oldNode[k]
-            }
-          }
+  function onDrop({ node, src, target }: { node: TreeNode; src: TreeNode | null; target: TreeNode }) {
+    console.log('drop', node, src, target)
+  }
 
-          if (oldNode.children && oldNode.children.length > 0) {
-            newNode.children = []
-            for (var i = 0, len = oldNode.children.length; i < len; i++) {
-              newNode.children.push(_dfs(oldNode.children[i]))
-            }
-          }
-          return newNode
+  function dropBefore({ node, src, target }: { node: TreeNode; src: TreeNode | null; target: TreeNode }) {
+    console.log('drop-before', node, src, target)
+  }
+
+  function dropAfter({ node, src, target }: { node: TreeNode; src: TreeNode | null; target: TreeNode }) {
+    console.log('drop-after', node, src, target)
+  }
+
+  function addNode() {
+    const node = new TreeNode({ name: 'new node', isLeaf: false })
+    if (!data.value.children) data.value.children = []
+    data.value.addChildren(node)
+  }
+
+  function getNewTree() {
+    function _dfs(oldNode: TreeNode): Record<string, unknown> {
+      const newNode: Record<string, unknown> = {}
+
+      for (const k in oldNode) {
+        if (k !== 'children' && k !== 'parent') {
+          newNode[k] = (oldNode as TreeNodeData)[k]
         }
-
-        vm.newTree = _dfs(vm.data)
       }
+
+      if (oldNode.children && oldNode.children.length > 0) {
+        newNode.children = []
+        for (let i = 0, len = oldNode.children.length; i < len; i++) {
+          ;(newNode.children as Record<string, unknown>[]).push(_dfs(oldNode.children[i]))
+        }
+      }
+      return newNode
     }
+
+    newTree.value = _dfs(data.value)
   }
 </script>
 
@@ -184,9 +223,9 @@ Or just register locally like the example below.
 
 |          name          |   type   |    default    |                                         description                                         |
 | :--------------------: | :------: | :-----------: | :-----------------------------------------------------------------------------------------: |
-|         model          | TreeNode |       -       | You can use `const head = new Tree([])` to generate a tree with the head of `TreeNode` type |
-| default-tree-node-name |  string  | New node node |                                Default name for new treenode                                |
-| default-leaf-node-name |  string  | New leaf node |                                Default name for new leafnode                                |
+|         model          | TreeNode |       -       |                 Use `new Tree([]).root` to pass the root node (`TreeNode`)                 |
+| default-tree-node-name |  string  |   Tree Node   |                                Default name for new treenode                                |
+| default-leaf-node-name |  string  |   Leaf Node   |                                Default name for new leafnode                                |
 |    default-expanded    | boolean  |     true      |                                   Tree is expanded or not                                   |
 
 ## props of TreeNode
@@ -220,7 +259,8 @@ Or just register locally like the example below.
 |    name     |            params            |                                                                           description                                                                           |
 | :---------: | :--------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 |    click    |           TreeNode           |                                Trigger when clicking a tree node. You can call `toggle` of `TreeNode` to toggle the folder node.                                |
-| change-name | {'id', 'oldName', 'newName'} |                                                              Trigger after changing a node's name                                                               |
+| change-name | {'id', 'oldName', 'newName', 'node?', 'eventType?'} |                                              Trigger while changing a node's name (input/blur)                                              |
+|  end-edit   | {'id', 'oldName', 'newName'} |                                                           Trigger when node name edit ends (blur/enter)                                                           |
 | delete-node |           TreeNode           |                                 Trigger when clicking `delNode` button. You can call `remove` of `TreeNode` to remove the node.                                 |
 |  add-node   |           TreeNode           |                                                                 Trigger after adding a new node                                                                 |
 |    drop     |     {node, src, target}      |   Trigger after dropping a node into another. node: the draggable node, src: the draggable node's parent, target: the node that draggable node will drop into   |
