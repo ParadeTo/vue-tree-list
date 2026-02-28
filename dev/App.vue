@@ -4,6 +4,9 @@
     <button @click="getTreeChange">Get tree change</button>
     <VueTreeList
       @click="onClick"
+      @drop="onDrop"
+      @drop-before="onDropBefore"
+      @drop-after="onDropAfter"
       :model="data"
       default-tree-node-name="new node"
       default-leaf-node-name="new leaf"
@@ -46,6 +49,10 @@
     </pre>
     <pre>
       {{ newTree }}
+    </pre>
+    <h3>Drag Events</h3>
+    <pre>
+      {{ dropLog }}
     </pre>
   </div>
 </template>
@@ -93,6 +100,7 @@ const isMobileValue = detectMobile()
 const isMobile = ref(isMobileValue)
 const record = ref<Record<string, unknown> | null>(null)
 const newTree = ref<Record<string, unknown>>({})
+const dropLog = ref<Record<string, unknown>[]>([])
 const data = ref(
   new Tree([
     {
@@ -139,6 +147,37 @@ function getNewTree() {
 
 function onClick(model: Record<string, unknown>) {
   console.log(model)
+}
+
+function toSimpleNode(node: TreeNode | null): Record<string, unknown> | null {
+  if (!node) return null
+  return {
+    id: node.id,
+    name: node.name,
+    pid: node.pid,
+  }
+}
+
+function pushDropLog(type: 'drop' | 'drop-before' | 'drop-after', payload: { node: TreeNode; src: TreeNode | null; target: TreeNode }) {
+  dropLog.value.unshift({
+    type,
+    node: toSimpleNode(payload.node),
+    src: toSimpleNode(payload.src),
+    target: toSimpleNode(payload.target),
+    at: new Date().toLocaleTimeString(),
+  })
+}
+
+function onDrop(payload: { node: TreeNode; src: TreeNode | null; target: TreeNode }) {
+  pushDropLog('drop', payload)
+}
+
+function onDropBefore(payload: { node: TreeNode; src: TreeNode | null; target: TreeNode }) {
+  pushDropLog('drop-before', payload)
+}
+
+function onDropAfter(payload: { node: TreeNode; src: TreeNode | null; target: TreeNode }) {
+  pushDropLog('drop-after', payload)
 }
 </script>
 

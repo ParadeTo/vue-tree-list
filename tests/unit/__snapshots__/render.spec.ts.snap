@@ -16,7 +16,7 @@ exports[`Render > render correctly 1`] = `
             <!--v-if-->
           </div>
         </div>
-        <!--v-if-->
+        <div class="vtl-border vtl-bottom"></div>
       </div>
       <div class="vtl-tree-margin" style="display: none;">
         <div class="vtl">
@@ -30,7 +30,7 @@ exports[`Render > render correctly 1`] = `
                 <!--v-if--><span title="edit"><i class="vtl-icon vtl-icon-edit"></i></span><span title="delete"><i class="vtl-icon vtl-icon-trash"></i></span>
               </div>
             </div>
-            <!--v-if-->
+            <div class="vtl-border vtl-bottom"></div>
           </div>
           <!--v-if-->
         </div>
@@ -44,7 +44,7 @@ exports[`Render > render correctly 1`] = `
           <div class="vtl-node-content">Node 2</div>
           <div class="vtl-operation" style="display: none;"><span title="Add Tree Node"><i class="vtl-icon vtl-icon-folder-plus-e"></i></span><span title="Add Leaf Node"><i class="vtl-icon vtl-icon-plus"></i></span><span title="edit"><i class="vtl-icon vtl-icon-edit"></i></span><span title="delete"><i class="vtl-icon vtl-icon-trash"></i></span></div>
         </div>
-        <!--v-if-->
+        <div class="vtl-border vtl-bottom"></div>
       </div>
       <!--v-if-->
     </div>
@@ -56,7 +56,7 @@ exports[`Render > render correctly 1`] = `
           <div class="vtl-node-content">Node 3</div>
           <div class="vtl-operation" style="display: none;"><span title="Add Tree Node"><i class="vtl-icon vtl-icon-folder-plus-e"></i></span><span title="Add Leaf Node"><i class="vtl-icon vtl-icon-plus"></i></span><span title="edit"><i class="vtl-icon vtl-icon-edit"></i></span><span title="delete"><i class="vtl-icon vtl-icon-trash"></i></span></div>
         </div>
-        <!--v-if-->
+        <div class="vtl-border vtl-bottom"></div>
       </div>
       <!--v-if-->
     </div>

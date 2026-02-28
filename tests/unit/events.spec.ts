@@ -110,4 +110,71 @@ describe('VueTreeList events', () => {
     expect(payload.id).toBe('t1')
     expect(payload.name).toBe('Node 1')
   })
+
+  it('moves node and emits drop when dragging across recursive instances', async () => {
+    const tree = new Tree([
+      { name: 'Node 1', id: 't1', pid: 0 },
+      { name: 'Node 2', id: 't2', pid: 0 },
+    ])
+    const wrapper = mount(VueTreeList, {
+      props: { model: tree.root },
+    })
+
+    await wrapper.find('#t2 .vtl-node-main').trigger('dragstart', {
+      dataTransfer: {
+        setData: () => {},
+        effectAllowed: 'move',
+      },
+    })
+    await wrapper.find('#t1 .vtl-node-main').trigger('dragover')
+    await wrapper.find('#t1 .vtl-node-main').trigger('drop')
+
+    const dropEvents = wrapper.emitted('drop')
+    expect(dropEvents).toBeTruthy()
+    const payload = dropEvents?.[0][0] as {
+      node: { id: string }
+      target: { id: string }
+      src: { id: number }
+    }
+    expect(payload.node.id).toBe('t2')
+    expect(payload.target.id).toBe('t1')
+    expect(payload.src.id).toBe(0)
+
+    expect(tree.root.children?.length).toBe(1)
+    expect(tree.root.children?.[0].id).toBe('t1')
+    expect(tree.root.children?.[0].children?.[0].id).toBe('t2')
+  })
+
+  it('emits drop-after when dropping to bottom zone of node without children', async () => {
+    const tree = new Tree([
+      { name: 'Node 1', id: 't1', pid: 0 },
+      { name: 'Node 2', id: 't2', pid: 0 },
+      { name: 'Node 3', id: 't3', pid: 0 },
+    ])
+    const wrapper = mount(VueTreeList, {
+      props: { model: tree.root },
+    })
+
+    await wrapper.find('#t1 .vtl-node-main').trigger('dragstart', {
+      dataTransfer: {
+        setData: () => {},
+        effectAllowed: 'move',
+      },
+    })
+    await wrapper.find('#t2 .vtl-bottom').trigger('dragover')
+    await wrapper.find('#t2 .vtl-bottom').trigger('drop')
+
+    const dropAfterEvents = wrapper.emitted('drop-after')
+    expect(dropAfterEvents).toBeTruthy()
+    const payload = dropAfterEvents?.[0][0] as {
+      node: { id: string }
+      target: { id: string }
+      src: { id: number }
+    }
+    expect(payload.node.id).toBe('t1')
+    expect(payload.target.id).toBe('t2')
+    expect(payload.src.id).toBe(0)
+
+    expect(tree.root.children?.map((n) => n.id)).toEqual(['t2', 't1', 't3'])
+  })
 })
