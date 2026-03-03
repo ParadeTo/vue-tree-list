@@ -1,9 +1,12 @@
 <template>
   <div>
     <button @click="addNode">Add Node</button>
-    <button @click="getTreeChange">Get tree change</button>
     <VueTreeList
       @click="onClick"
+      @change-name="onChangeName"
+      @end-edit="onEndEdit"
+      @delete-node="onDeleteNode"
+      @add-node="onAddNode"
       @drop="onDrop"
       @drop-before="onDropBefore"
       @drop-after="onDropAfter"
@@ -38,172 +41,152 @@
             slotProps.model.children && slotProps.model.children.length > 0 && !slotProps.expanded
               ? '🌲'
               : ''
-          }}</span
-        >
+          }}
+        </span>
       </template>
     </VueTreeList>
     <button @click="getNewTree">Get new tree</button>
-    <p>isMobile: {{ isMobile }}</p>
-    <pre>
-      {{ record }}
-    </pre>
     <pre>
       {{ newTree }}
-    </pre>
-    <h3>Drag Events</h3>
-    <pre>
-      {{ dropLog }}
     </pre>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+  import { ref } from 'vue'
 import { VueTreeList, Tree, TreeNode } from '../src'
+  import type { TreeNodeData } from '../src'
 
-function detectMobile(): boolean {
-  const userAgent = navigator.userAgent.toLowerCase()
+  const newTree = ref<Record<string, unknown>>({})
+  const data = ref(
+    new Tree([
+      {
+        name: 'Node 1',
+        id: 1,
+        pid: 0,
+        dragDisabled: true,
+        addTreeNodeDisabled: true,
+        addLeafNodeDisabled: true,
+        editNodeDisabled: true,
+        delNodeDisabled: true,
+        children: [
+          {
+            name: 'Node 1-2',
+            id: 2,
+            isLeaf: true,
+            pid: 1
+          }
+        ]
+      },
+      {
+        name: 'Node 2',
+        id: 3,
+        pid: 0,
+        disabled: true
+      },
+      {
+        name: 'Node 3',
+        id: 4,
+        pid: 0
+      }
+    ]).root
+  )
 
-  const isIpad = /ipad/i.test(userAgent)
-  const isIphoneOs = /iphone os/i.test(userAgent)
-  const isMidp = /midp/i.test(userAgent)
-  const isUc7 = /rv:1.2.3.4/i.test(userAgent)
-  const isUc = /ucweb/i.test(userAgent)
-  const isAndroid = /android/i.test(userAgent)
-  const isCE = /windows ce/i.test(userAgent)
-  const isWM = /windows mobile/i.test(userAgent)
-  const isWx = /MicroMessenger/i.test(userAgent)
+  function nodeLabel(node: TreeNode | null): string {
+    if (!node) return 'null'
+    return `#${String(node.id)} ${node.name}`
+  }
 
-  return isIpad || isIphoneOs || isMidp || isUc7 || isUc || isAndroid || isCE || isWM || isWx
-}
+  function onDeleteNode(node: TreeNode) {
+    console.log('delete-node', nodeLabel(node), node)
+    node.remove()
+  }
 
-function getTreeSnapshot(oldNode: TreeNode): Record<string, unknown> {
-  const newNode: Record<string, unknown> = {}
+  function onEndEdit(payload: { id: number | string; oldName: string; newName: string }) {
+    console.log('end-edit', payload)
+  }
 
-  for (const k in oldNode) {
-    if (k !== 'children' && k !== 'parent') {
-      newNode[k] = (oldNode as Record<string, unknown>)[k]
+  function onChangeName(payload: {
+    id: number | string
+    oldName: string
+    newName: string
+    eventType?: string
+  }) {
+    console.log('change-name', payload)
+  }
+
+  function onAddNode(node: TreeNode) {
+    console.log('add-node', nodeLabel(node), node)
+  }
+
+  function onClick(model: Record<string, unknown>) {
+    console.log('click', model)
+  }
+
+  function onDrop({ node, src, target }: { node: TreeNode; src: TreeNode | null; target: TreeNode }) {
+    console.log('drop', nodeLabel(node), nodeLabel(src), nodeLabel(target), { node, src, target })
+  }
+
+  function onDropBefore({ node, src, target }: { node: TreeNode; src: TreeNode | null; target: TreeNode }) {
+    console.log('drop-before', nodeLabel(node), nodeLabel(src), nodeLabel(target), { node, src, target })
+  }
+
+  function onDropAfter({ node, src, target }: { node: TreeNode; src: TreeNode | null; target: TreeNode }) {
+    console.log('drop-after', nodeLabel(node), nodeLabel(src), nodeLabel(target), { node, src, target })
+  }
+
+  function addNode() {
+    const node = new TreeNode({ name: 'new node', isLeaf: false })
+    if (!data.value.children) data.value.children = []
+    data.value.addChildren(node)
+  }
+
+  function getNewTree() {
+    function _dfs(oldNode: TreeNode): Record<string, unknown> {
+      const newNode: Record<string, unknown> = {}
+
+      for (const k in oldNode) {
+        if (k !== 'children' && k !== 'parent') {
+          newNode[k] = (oldNode as TreeNodeData)[k]
+        }
+      }
+
+      if (oldNode.children && oldNode.children.length > 0) {
+        newNode.children = []
+        for (let i = 0, len = oldNode.children.length; i < len; i++) {
+          ;(newNode.children as Record<string, unknown>[]).push(_dfs(oldNode.children[i]))
+        }
+      }
+      return newNode
     }
+
+    newTree.value = _dfs(data.value)
   }
-
-  if (oldNode.children && oldNode.children.length > 0) {
-    newNode.children = []
-    for (let i = 0, len = oldNode.children.length; i < len; i++) {
-      ;(newNode.children as Record<string, unknown>[]).push(getTreeSnapshot(oldNode.children[i]))
-    }
-  }
-
-  return newNode
-}
-
-const isMobileValue = detectMobile()
-const isMobile = ref(isMobileValue)
-const record = ref<Record<string, unknown> | null>(null)
-const newTree = ref<Record<string, unknown>>({})
-const dropLog = ref<Record<string, unknown>[]>([])
-const data = ref(
-  new Tree([
-    {
-      name: 'Node 1',
-      id: 1,
-      pid: 0,
-      dragDisabled: true,
-      children: [
-        {
-          name: 'Node 1-2',
-          id: 2,
-          isLeaf: true,
-          pid: 1,
-        },
-      ],
-    },
-    {
-      name: 'Node 2',
-      id: 3,
-      pid: 0,
-      disabled: true,
-    },
-    {
-      name: 'Node 3',
-      id: 4,
-      pid: 0,
-    },
-  ]).root,
-)
-
-function getTreeChange() {
-  record.value = getTreeSnapshot(data.value)
-}
-
-function addNode() {
-  const node = new TreeNode({ name: 'new node', isLeaf: false })
-  if (!data.value.children) data.value.children = []
-  data.value.addChildren(node)
-}
-
-function getNewTree() {
-  newTree.value = getTreeSnapshot(data.value)
-}
-
-function onClick(model: Record<string, unknown>) {
-  console.log(model)
-}
-
-function toSimpleNode(node: TreeNode | null): Record<string, unknown> | null {
-  if (!node) return null
-  return {
-    id: node.id,
-    name: node.name,
-    pid: node.pid,
-  }
-}
-
-function pushDropLog(type: 'drop' | 'drop-before' | 'drop-after', payload: { node: TreeNode; src: TreeNode | null; target: TreeNode }) {
-  dropLog.value.unshift({
-    type,
-    node: toSimpleNode(payload.node),
-    src: toSimpleNode(payload.src),
-    target: toSimpleNode(payload.target),
-    at: new Date().toLocaleTimeString(),
-  })
-}
-
-function onDrop(payload: { node: TreeNode; src: TreeNode | null; target: TreeNode }) {
-  pushDropLog('drop', payload)
-}
-
-function onDropBefore(payload: { node: TreeNode; src: TreeNode | null; target: TreeNode }) {
-  pushDropLog('drop-before', payload)
-}
-
-function onDropAfter(payload: { node: TreeNode; src: TreeNode | null; target: TreeNode }) {
-  pushDropLog('drop-after', payload)
-}
 </script>
 
 <style lang="less" rel="stylesheet/less">
-.vtl {
-  .vtl-drag-disabled {
-    background-color: #d0cfcf;
-    &:hover {
+  .vtl {
+    .vtl-drag-disabled {
+      background-color: #d0cfcf;
+      &:hover {
+        background-color: #d0cfcf;
+      }
+    }
+    .vtl-disabled {
       background-color: #d0cfcf;
     }
   }
-  .vtl-disabled {
-    background-color: #d0cfcf;
-  }
-}
 </style>
 
 <style lang="less" rel="stylesheet/less" scoped>
-.icon {
-  &:hover {
-    cursor: pointer;
+  .icon {
+    &:hover {
+      cursor: pointer;
+    }
   }
-}
 
-.muted {
-  color: gray;
-  font-size: 80%;
-}
+  .muted {
+    color: gray;
+    font-size: 80%;
+  }
 </style>
