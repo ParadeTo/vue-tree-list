@@ -54,8 +54,8 @@
 
 <script setup lang="ts">
   import { ref } from 'vue'
-import { VueTreeList, Tree, TreeNode } from '../src'
-  import type { TreeNodeData } from '../src'
+  import { VueTreeList, Tree, TreeNode } from 'vue-tree-list'
+  import type { TreeNodeData } from 'vue-tree-list'
 
   const newTree = ref<Record<string, unknown>>({})
   const data = ref(
@@ -64,31 +64,25 @@ import { VueTreeList, Tree, TreeNode } from '../src'
         name: 'Node 1',
         id: 1,
         pid: 0,
-        dragDisabled: true,
-        addTreeNodeDisabled: true,
-        addLeafNodeDisabled: true,
-        editNodeDisabled: true,
-        delNodeDisabled: true,
         children: [
           {
             name: 'Node 1-2',
             id: 2,
             isLeaf: true,
-            pid: 1
-          }
-        ]
+            pid: 1,
+          },
+        ],
       },
       {
         name: 'Node 2',
         id: 3,
         pid: 0,
-        disabled: true
       },
       {
         name: 'Node 3',
         id: 4,
-        pid: 0
-      }
+        pid: 0,
+      },
     ]).root
   )
 
@@ -121,18 +115,54 @@ import { VueTreeList, Tree, TreeNode } from '../src'
 
   function onClick(model: Record<string, unknown>) {
     console.log('click', model)
+    const toggle = (model as { toggle?: () => void }).toggle
+    if (typeof toggle === 'function') {
+      toggle()
+    }
   }
 
-  function onDrop({ node, src, target }: { node: TreeNode; src: TreeNode | null; target: TreeNode }) {
+  function onDrop({
+    node,
+    src,
+    target,
+  }: {
+    node: TreeNode
+    src: TreeNode | null
+    target: TreeNode
+  }) {
     console.log('drop', nodeLabel(node), nodeLabel(src), nodeLabel(target), { node, src, target })
   }
 
-  function onDropBefore({ node, src, target }: { node: TreeNode; src: TreeNode | null; target: TreeNode }) {
-    console.log('drop-before', nodeLabel(node), nodeLabel(src), nodeLabel(target), { node, src, target })
+  function onDropBefore({
+    node,
+    src,
+    target,
+  }: {
+    node: TreeNode
+    src: TreeNode | null
+    target: TreeNode
+  }) {
+    console.log('drop-before', nodeLabel(node), nodeLabel(src), nodeLabel(target), {
+      node,
+      src,
+      target,
+    })
   }
 
-  function onDropAfter({ node, src, target }: { node: TreeNode; src: TreeNode | null; target: TreeNode }) {
-    console.log('drop-after', nodeLabel(node), nodeLabel(src), nodeLabel(target), { node, src, target })
+  function onDropAfter({
+    node,
+    src,
+    target,
+  }: {
+    node: TreeNode
+    src: TreeNode | null
+    target: TreeNode
+  }) {
+    console.log('drop-after', nodeLabel(node), nodeLabel(src), nodeLabel(target), {
+      node,
+      src,
+      target,
+    })
   }
 
   function addNode() {
@@ -164,29 +194,39 @@ import { VueTreeList, Tree, TreeNode } from '../src'
   }
 </script>
 
-<style lang="less" rel="stylesheet/less">
+<style lang="scss">
   .vtl {
-    .vtl-drag-disabled {
-      background-color: #d0cfcf;
+    font-size: 15px;
+    padding: 5px 0;
+
+    .vtl-node-main {
+      display: flex;
+      align-items: start;
+      gap: 8px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+
       &:hover {
-        background-color: #d0cfcf;
+        background-color: rgb(var(--v-theme-lightGrey));
       }
     }
-    .vtl-disabled {
-      background-color: #d0cfcf;
-    }
-  }
-</style>
 
-<style lang="less" rel="stylesheet/less" scoped>
-  .icon {
-    &:hover {
-      cursor: pointer;
+    .vtl-node-main:has(span[data-selected='true']) {
+      background-color: rgb(var(--v-theme-primary));
+      color: white;
     }
-  }
 
-  .muted {
-    color: gray;
-    font-size: 80%;
+    .vtl-caret {
+      display: none !important;
+    }
+    .vtl-operation {
+      display: flex !important;
+      gap: 4px;
+    }
+    .vtl-tree-margin {
+      margin-left: 20px;
+    }
   }
 </style>
