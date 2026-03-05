@@ -366,10 +366,37 @@ function dragLeave() {
   isDragEnterNode.value = false
 }
 
-function drop() {
+function drop(e: DragEvent) {
   const currentDragModel = dragModel.value
   if (!currentDragModel) return
   const oldParent = currentDragModel.parent
+
+  if (props.model.isLeaf) {
+    const currentTarget = e.currentTarget as HTMLElement | null
+    const rect = currentTarget?.getBoundingClientRect()
+    const shouldInsertBefore =
+      typeof rect === 'undefined' ? true : e.clientY < rect.top + rect.height / 2
+
+    if (shouldInsertBefore) {
+      currentDragModel.insertBefore(props.model)
+      rootEmit('drop-before', {
+        target: props.model,
+        node: currentDragModel,
+        src: oldParent,
+      })
+    } else {
+      currentDragModel.insertAfter(props.model)
+      rootEmit('drop-after', {
+        target: props.model,
+        node: currentDragModel,
+        src: oldParent,
+      })
+    }
+
+    isDragEnterNode.value = false
+    return
+  }
+
   currentDragModel.moveInto(props.model)
   isDragEnterNode.value = false
   rootEmit('drop', {
