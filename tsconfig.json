@@ -9,6 +9,7 @@
     "jsx": "preserve",
     "declaration": true,
     "declarationDir": "dist/types",
+    "rootDir": ".",
     "emitDeclarationOnly": true,
     "sourceMap": true,
     "esModuleInterop": true,
@@ -18,7 +19,8 @@
     "isolatedModules": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "vue-tree-list": ["dist/types/index.d.ts"]
     }
   },
   "include": [

@@ -110,4 +110,153 @@ describe('VueTreeList events', () => {
     expect(payload.id).toBe('t1')
     expect(payload.name).toBe('Node 1')
   })
+
+  it('moves node and emits drop when dragging across recursive instances', async () => {
+    const tree = new Tree([
+      { name: 'Node 1', id: 't1', pid: 0 },
+      { name: 'Node 2', id: 't2', pid: 0 },
+    ])
+    const wrapper = mount(VueTreeList, {
+      props: { model: tree.root },
+    })
+
+    await wrapper.find('#t2 .vtl-node-main').trigger('dragstart', {
+      dataTransfer: {
+        setData: () => {},
+        effectAllowed: 'move',
+      },
+    })
+    await wrapper.find('#t1 .vtl-node-main').trigger('dragover')
+    await wrapper.find('#t1 .vtl-node-main').trigger('drop')
+
+    const dropEvents = wrapper.emitted('drop')
+    expect(dropEvents).toBeTruthy()
+    const payload = dropEvents?.[0][0] as {
+      node: { id: string }
+      target: { id: string }
+      src: { id: number }
+    }
+    expect(payload.node.id).toBe('t2')
+    expect(payload.target.id).toBe('t1')
+    expect(payload.src.id).toBe(0)
+
+    expect(tree.root.children?.length).toBe(1)
+    expect(tree.root.children?.[0].id).toBe('t1')
+    expect(tree.root.children?.[0].children?.[0].id).toBe('t2')
+  })
+
+  it('emits drop-after when dropping to bottom zone of node without children', async () => {
+    const tree = new Tree([
+      { name: 'Node 1', id: 't1', pid: 0 },
+      { name: 'Node 2', id: 't2', pid: 0 },
+      { name: 'Node 3', id: 't3', pid: 0 },
+    ])
+    const wrapper = mount(VueTreeList, {
+      props: { model: tree.root },
+    })
+
+    await wrapper.find('#t1 .vtl-node-main').trigger('dragstart', {
+      dataTransfer: {
+        setData: () => {},
+        effectAllowed: 'move',
+      },
+    })
+    await wrapper.find('#t2 .vtl-bottom').trigger('dragover')
+    await wrapper.find('#t2 .vtl-bottom').trigger('drop')
+
+    const dropAfterEvents = wrapper.emitted('drop-after')
+    expect(dropAfterEvents).toBeTruthy()
+    const payload = dropAfterEvents?.[0][0] as {
+      node: { id: string }
+      target: { id: string }
+      src: { id: number }
+    }
+    expect(payload.node.id).toBe('t1')
+    expect(payload.target.id).toBe('t2')
+    expect(payload.src.id).toBe(0)
+
+    expect(tree.root.children?.map((n) => n.id)).toEqual(['t2', 't1', 't3'])
+  })
+
+  it('converts drop on leaf node body into drop-before/drop-after by cursor position', async () => {
+    const tree = new Tree([
+      {
+        name: 'Node 1',
+        id: 't1',
+        pid: 0,
+        children: [
+          {
+            name: 'Node 1-1',
+            id: 't11',
+            isLeaf: true,
+            pid: 't1',
+          },
+        ],
+      },
+      { name: 'Node 2', id: 't2', pid: 0 },
+    ])
+
+    const wrapper = mount(VueTreeList, {
+      props: { model: tree.root },
+    })
+
+    const leafMain = wrapper.find('#t11 .vtl-node-main')
+    const leafElement = leafMain.element as HTMLElement
+    leafElement.getBoundingClientRect = () => ({
+      x: 0,
+      y: 100,
+      width: 200,
+      height: 20,
+      top: 100,
+      right: 200,
+      bottom: 120,
+      left: 0,
+      toJSON: () => ({}),
+    })
+
+    await wrapper.find('#t2 .vtl-node-main').trigger('dragstart', {
+      dataTransfer: {
+        setData: () => {},
+        effectAllowed: 'move',
+      },
+    })
+
+    await leafMain.trigger('dragover')
+    await leafMain.trigger('drop', { clientY: 105 })
+
+    const dropBeforeEvents = wrapper.emitted('drop-before')
+    expect(dropBeforeEvents).toBeTruthy()
+    expect((dropBeforeEvents?.[0][0] as { node: { id: string }; target: { id: string } }).node.id).toBe(
+      't2',
+    )
+    expect((dropBeforeEvents?.[0][0] as { node: { id: string }; target: { id: string } }).target.id).toBe(
+      't11',
+    )
+
+    expect(tree.root.children?.[0].id).toBe('t1')
+    expect(tree.root.children?.[0].children?.map((n) => n.id)).toEqual(['t2', 't11'])
+
+    await wrapper.find('#t2 .vtl-node-main').trigger('dragstart', {
+      dataTransfer: {
+        setData: () => {},
+        effectAllowed: 'move',
+      },
+    })
+
+    await leafMain.trigger('dragover')
+    await leafMain.trigger('drop', { clientY: 115 })
+
+    const dropAfterEvents = wrapper.emitted('drop-after')
+    expect(dropAfterEvents).toBeTruthy()
+    expect(
+      (dropAfterEvents?.[dropAfterEvents.length - 1][0] as { node: { id: string }; target: { id: string } })
+        .node.id,
+    ).toBe('t2')
+    expect(
+      (dropAfterEvents?.[dropAfterEvents.length - 1][0] as { node: { id: string }; target: { id: string } })
+        .target.id,
+    ).toBe('t11')
+
+    expect(tree.root.children?.[0].children?.map((n) => n.id)).toEqual(['t11', 't2'])
+  })
 })

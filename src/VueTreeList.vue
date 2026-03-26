@@ -90,7 +90,6 @@
       </div>
 
       <div
-        v-if="model.children && model.children.length > 0 && expanded"
         class="vtl-border vtl-bottom"
         :class="{ 'vtl-active': isDragEnterBottom }"
         @drop="dropAfter"
@@ -147,6 +146,7 @@ import {
   provide,
   inject,
   onBeforeUnmount,
+  type Ref,
   type ComponentPublicInstance,
 } from 'vue'
 import { TreeNode } from './Tree'
@@ -194,11 +194,9 @@ const emit = defineEmits<{
   (e: 'end-edit', payload: { id: number | string; oldName: string; newName: string }): void
 }>()
 
-// --- Drag state (module-level) ---
-let compInOperation: { model: TreeNode } | null = null
-
 // --- Provide/Inject for root event emitting ---
 type RootEmitFn = (event: string, payload: unknown) => void
+type DragModelRef = Ref<TreeNode | null>
 
 const isRoot = props.model.name === 'root'
 
@@ -210,6 +208,13 @@ const rootEmit: RootEmitFn = isRoot
 
 if (isRoot) {
   provide('vtl-root-emit', rootEmit)
+}
+
+const injectedDragModel = inject<DragModelRef | null>('vtl-drag-model', null)
+const dragModel: DragModelRef = isRoot ? ref<TreeNode | null>(null) : (injectedDragModel ?? ref<TreeNode | null>(null))
+
+if (isRoot) {
+  provide('vtl-drag-model', dragModel)
 }
 
 const rootNode = computed(() => {
@@ -330,7 +335,7 @@ function addChild(isLeaf: boolean) {
 
 function dragStart(e: DragEvent) {
   if (!(props.model.dragDisabled || props.model.disabled)) {
-    compInOperation = { model: props.model }
+    dragModel.value = props.model
     // for firefox
     e.dataTransfer?.setData('data', 'data')
     if (e.dataTransfer) {
@@ -342,7 +347,7 @@ function dragStart(e: DragEvent) {
 }
 
 function dragEnd() {
-  compInOperation = null
+  dragModel.value = null
 }
 
 function dragOver(e: DragEvent) {
@@ -351,8 +356,9 @@ function dragOver(e: DragEvent) {
 }
 
 function dragEnter() {
-  if (!compInOperation) return
-  if (compInOperation.model.id === props.model.id || props.model.isLeaf) return
+  const currentDragModel = dragModel.value
+  if (!currentDragModel) return
+  if (currentDragModel.id === props.model.id || props.model.isLeaf) return
   isDragEnterNode.value = true
 }
 
@@ -360,20 +366,48 @@ function dragLeave() {
   isDragEnterNode.value = false
 }
 
-function drop() {
-  if (!compInOperation) return
-  const oldParent = compInOperation.model.parent
-  compInOperation.model.moveInto(props.model)
+function drop(e: DragEvent) {
+  const currentDragModel = dragModel.value
+  if (!currentDragModel) return
+  const oldParent = currentDragModel.parent
+
+  if (props.model.isLeaf) {
+    const currentTarget = e.currentTarget as HTMLElement | null
+    const rect = currentTarget?.getBoundingClientRect()
+    const shouldInsertBefore =
+      typeof rect === 'undefined' ? true : e.clientY < rect.top + rect.height / 2
+
+    if (shouldInsertBefore) {
+      currentDragModel.insertBefore(props.model)
+      rootEmit('drop-before', {
+        target: props.model,
+        node: currentDragModel,
+        src: oldParent,
+      })
+    } else {
+      currentDragModel.insertAfter(props.model)
+      rootEmit('drop-after', {
+        target: props.model,
+        node: currentDragModel,
+        src: oldParent,
+      })
+    }
+
+    isDragEnterNode.value = false
+    return
+  }
+
+  currentDragModel.moveInto(props.model)
   isDragEnterNode.value = false
   rootEmit('drop', {
     target: props.model,
-    node: compInOperation.model,
+    node: currentDragModel,
     src: oldParent,
   })
 }
 
 function dragEnterUp() {
-  if (!compInOperation) return
+  if (!dragModel.value) return
   isDragEnterUp.value = true
 }
 
@@ -383,24 +417,25 @@ function dragOverUp(e: DragEvent) {
 }
 
 function dragLeaveUp() {
-  if (!compInOperation) return
+  if (!dragModel.value) return
   isDragEnterUp.value = false
 }
 
 function dropBefore() {
-  if (!compInOperation) return
-  const oldParent = compInOperation.model.parent
-  compInOperation.model.insertBefore(props.model)
+  const currentDragModel = dragModel.value
+  if (!currentDragModel) return
+  const oldParent = currentDragModel.parent
+  currentDragModel.insertBefore(props.model)
   isDragEnterUp.value = false
   rootEmit('drop-before', {
     target: props.model,
-    node: compInOperation.model,
+    node: currentDragModel,
     src: oldParent,
   })
 }
 
 function dragEnterBottom() {
-  if (!compInOperation) return
+  if (!dragModel.value) return
   isDragEnterBottom.value = true
 }
 
@@ -410,18 +445,19 @@ function dragOverBottom(e: DragEvent) {
 }
 
 function dragLeaveBottom() {
-  if (!compInOperation) return
+  if (!dragModel.value) return
   isDragEnterBottom.value = false
 }
 
 function dropAfter() {
-  if (!compInOperation) return
-  const oldParent = compInOperation.model.parent
-  compInOperation.model.insertAfter(props.model)
+  const currentDragModel = dragModel.value
+  if (!currentDragModel) return
+  const oldParent = currentDragModel.parent
+  currentDragModel.insertAfter(props.model)
   isDragEnterBottom.value = false
   rootEmit('drop-after', {
     target: props.model,
-    node: compInOperation.model,
+    node: currentDragModel,
     src: oldParent,
   })
 }
@@ -490,7 +526,7 @@ function dropAfter() {
 }
 
 .vtl-border {
-  height: 5px;
+  height: 8px;
   &.vtl-up {
     margin-top: -5px;
     background-color: transparent;

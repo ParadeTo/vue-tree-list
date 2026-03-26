@@ -59,11 +59,11 @@ If you are using Vue 2, use `npm install vue-tree-list@1`.
       @click="onClick"
       @change-name="onChangeName"
       @end-edit="onEndEdit"
-      @delete-node="onDel"
+      @delete-node="onDeleteNode"
       @add-node="onAddNode"
       @drop="onDrop"
-      @drop-before="dropBefore"
-      @drop-after="dropAfter"
+      @drop-before="onDropBefore"
+      @drop-after="onDropAfter"
       :model="data"
       default-tree-node-name="new node"
       default-leaf-node-name="new leaf"
@@ -146,37 +146,47 @@ If you are using Vue 2, use `npm install vue-tree-list@1`.
     ]).root
   )
 
-  function onDel(node: TreeNode) {
-    console.log('onDel', node)
+  function nodeLabel(node: TreeNode | null): string {
+    if (!node) return 'null'
+    return `#${String(node.id)} ${node.name}`
+  }
+
+  function onDeleteNode(node: TreeNode) {
+    console.log('delete-node', nodeLabel(node), node)
     node.remove()
   }
 
-  function onEndEdit(params: Record<string, unknown>) {
-    console.log('onEndEdit', params)
+  function onEndEdit(payload: { id: number | string; oldName: string; newName: string }) {
+    console.log('end-edit', payload)
   }
 
-  function onChangeName(params: Record<string, unknown>) {
-    console.log('onChangeName', params)
+  function onChangeName(payload: {
+    id: number | string
+    oldName: string
+    newName: string
+    eventType?: string
+  }) {
+    console.log('change-name', payload)
   }
 
-  function onAddNode(params: TreeNode) {
-    console.log('onAddNode', params)
+  function onAddNode(node: TreeNode) {
+    console.log('add-node', nodeLabel(node), node)
   }
 
-  function onClick(params: Record<string, unknown>) {
-    console.log('onClick', params)
+  function onClick(model: Record<string, unknown>) {
+    console.log('click', model)
   }
 
   function onDrop({ node, src, target }: { node: TreeNode; src: TreeNode | null; target: TreeNode }) {
-    console.log('drop', node, src, target)
+    console.log('drop', nodeLabel(node), nodeLabel(src), nodeLabel(target), { node, src, target })
   }
 
-  function dropBefore({ node, src, target }: { node: TreeNode; src: TreeNode | null; target: TreeNode }) {
-    console.log('drop-before', node, src, target)
+  function onDropBefore({ node, src, target }: { node: TreeNode; src: TreeNode | null; target: TreeNode }) {
+    console.log('drop-before', nodeLabel(node), nodeLabel(src), nodeLabel(target), { node, src, target })
   }
 
-  function dropAfter({ node, src, target }: { node: TreeNode; src: TreeNode | null; target: TreeNode }) {
-    console.log('drop-after', node, src, target)
+  function onDropAfter({ node, src, target }: { node: TreeNode; src: TreeNode | null; target: TreeNode }) {
+    console.log('drop-after', nodeLabel(node), nodeLabel(src), nodeLabel(target), { node, src, target })
   }
 
   function addNode() {
